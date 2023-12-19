@@ -1,0 +1,438 @@
+<div class="app-menu navbar-menu">
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <!-- Dark Logo-->
+        <a href="index.html" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="<?= base_url() ?>assets/images/logo-alyusro.png" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="<?= base_url() ?>assets/images/logo-alyusro.png" alt="" height="17">
+            </span>
+        </a>
+        <!-- Light Logo-->
+        <a href="index.html" class="logo logo-light">
+            <span class="logo-sm pt-2 pb-2">
+                <img class="mt-3 mb-2" src="<?= base_url() ?>assets/images/logo-alyusro.png" alt="" height="20">
+            </span>
+            <span class="logo-lg pt-2 pb-2">
+                <img class="mt-4 mb-3" src="<?= base_url() ?>assets/images/logo-alyusro.png" alt="" height="75">
+            </span>
+        </a>
+        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+            id="vertical-hover">
+            <i class="ri-record-circle-line"></i>
+        </button>
+    </div>
+
+    <div id="scrollbar">
+        <div class="container-fluid">
+
+            <div id="two-column-menu">
+            </div>
+            <ul class="navbar-nav" id="navbar-nav">
+
+                <li class="menu-title"><span data-key="t-menu">Modul Dashboard</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="<?=base_url()?>Dashboard" role="button">
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
+                    </a>
+                </li> <!-- end Dashboard Menu -->
+                <li class="menu-title"><span data-key="t-menu">Modul Master</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="<?=base_url()?>User" role="button" aria-expanded="false">
+                        <i class=" ri-user-line"></i> <span data-key="t-dashboards">User</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="<?=base_url()?>JadwalKeberangkatan" role="button"
+                        aria-expanded="false">
+                        <i class=" ri-calendar-check-line"></i> <span data-key="t-dashboards">Jadwal
+                            Keberangkatan</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="<?=base_url()?>SubsidiAgen" role="button"
+                        aria-expanded="false">
+                        <i class=" ri-money-dollar-box-line"></i> <span data-key="t-dashboards">Subsidi Agen</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link " href="<?=base_url()?>InformasiText" role="button"
+                        aria-expanded="false">
+                        <i class=" ri-article-line"></i> <span data-key="t-dashboards">Informasi Text</span>
+                    </a>
+                </li>
+
+                <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Modul Utama</span></li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="tables-datatables.html#sidebarPendaftaran"
+                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
+                        <i class=" ri-survey-line"></i> <span data-key="t-authentication">Pendaftaran</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarPendaftaran">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>UmrahTerjadwal/Daftar" class="nav-link" role="button"
+                                    aria-expanded="false"> Umrah Terjadwal
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>TabunganUmrah/Daftar" class="nav-link " role="button"
+                                    aria-expanded="false"> Tabungan Umrah
+                                </a>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a href="<?=base_url()?>Agen/Daftar" class="nav-link" role="button"
+                                    aria-expanded="false"> Agen
+                                </a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Donasi/Daftar" class="nav-link" role="button"
+                                    aria-expanded="false"> Donasi
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="tables-datatables.html#sidebarValidasi"
+                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
+                        <i class=" ri-checkbox-circle-line"></i> <span data-key="t-authentication">Validasi</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarValidasi">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Validasi/Pembayaran" class="nav-link " role="button"
+                                    aria-expanded="false"> Pembayaran
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Validasi/Kelengkapan" class="nav-link" role="button"
+                                    aria-expanded="false"> Kelengkapan Umrah
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Validasi/Manifestasi" class="nav-link" role="button"
+                                    aria-expanded="false"> Manifestasi Umrah
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="tables-datatables.html#sidebarListing" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="sidebarAuth">
+                        <i class=" ri-file-list-3-line"></i> <span data-key="t-authentication">Listing</span>
+                    </a>
+                    <div class="collapse menu-dropdown show" id="sidebarListing">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>UmrahTerjadwal/Listing" class="nav-link " role="button"
+                                    aria-expanded="false"> Umrah Terjadwal
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>TabunganUmrah/Listing" class="nav-link" role="button"
+                                    aria-expanded="false"> Tabungan Umrah
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Agen/Listing" class="nav-link" role="button"
+                                    aria-expanded="false"> Perwakilan
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Laskar/Listing" class="nav-link active" role="button"
+                                    aria-expanded="false"> Agen
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>UmrahTerjadwal/ListingJemaah" class="nav-link" role="button"
+                                    aria-expanded="false"> Database Jemaah
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Donasi/Listing" class="nav-link" role="button"
+                                    aria-expanded="false"> Donasi
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="tables-datatables.html#sidebarKeuangan"
+                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarKeuangan">
+                        <i class=" ri-money-dollar-box-line"></i> <span data-key="t-keuangan">Keuangan</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarKeuangan">
+                        <ul class="nav nav-sm flex-column">
+                            
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Validasi/HistoryPembayaran" class="nav-link"
+                                    data-key="t-history-pembayaran"> History Pembayaran
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=base_url()?>Invoice/" class="nav-link" data-key="t-invoice"> Invoice
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://akunting.alyusrobandung.com/login" class="nav-link" data-key="t-analytics">
+                                    Keuangan Perusahaan
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+
+    <div class="sidebar-background"></div>
+</div>
+<!-- Left Sidebar End -->
+<!-- Vertical Overlay-->
+<div class="vertical-overlay"></div>
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="main-content">
+
+    <div class="page-content">
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0">Detail Data Agen</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Listing </a></li>
+                                <li class="breadcrumb-item active">Detail Agen</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <h3>Detail Agen</h3>
+
+                                    <table class="table" style="width:90%;">
+                                        <tr>
+                                            <td><h5>Nama Agen</h5></td>
+                                            <td>:</td>
+                                            <td><h5><?=$rows->nama_laskar?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td><h5>User ID Agen</h5></td>
+                                            <td>:</td>
+                                            <td><h5><?=$rows->user_id_laskar?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td><h5>Kota Agen</h5></td>
+                                            <td>:</td>
+                                            <td><h5><?=$rows->kota_laskar?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td><h5>Alamat</h5></td>
+                                            <td>:</td>
+                                            <td><h5><?=$rows->alamat_laskar?></h5></td>
+                                        </tr>
+                                        <tr>
+                                            <td><h5>No Handphone</h5></td>
+                                            <td>:</td>
+                                            <td><h5><?=$rows->no_telp_laskar?></h5></td>
+                                        </tr>
+
+                                    </table>
+                                  
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end col-->
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12" >
+                                    <h3>Jumlah Uang Ujroh</h3>
+                                    <div class="card card-animate bg-danger mt-3" style="width:100%;">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <p class="fw-medium text-white mb-0">Jumlah Perlu Di Bayar</p>
+                                                    <h2 class="mt-2 ff-secondary fw-semibold text-white"><?= number_format($ujroh_belum_bayar->nominal)?></h2>
+                                                </div>
+                                                <div>
+                                                    <div class="avatar-sm flex-shrink-0">
+                                                        <span class="avatar-title bg-soft-light rounded-circle fs-2">
+                                                            <i class="bx bx-dollar-circle text-white"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- end card body -->
+                                    </div>
+                                    <div class="card card-animate bg-success mt-3" style="width:100%;">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <p class="fw-medium text-white mb-0">Jumlah Sudah Di Bayar</p>
+                                                    <h2 class="mt-2 ff-secondary fw-semibold text-white"><?= number_format($ujroh_sudah_bayar->nominal)?></h2>
+                                                </div>
+                                                <div>
+                                                    <div class="avatar-sm flex-shrink-0">
+                                                        <span class="avatar-title bg-soft-light rounded-circle fs-2">
+                                                            <i class="bx bx-dollar-circle text-white"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- end card body -->
+                                    </div>
+                                    
+                                        <!-- <button class="btn btn-info mt-2" >Edit Tiket</button> -->
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end col-->
+                
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="">Data History Ujroh</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 table-responsive"  >
+                                    <table class="table" id="example" >
+                                        <thead>
+                                            <tr>
+                                                <td><h5 class="">Tanggal</h5></td>
+                                                <td><h5 class="">Jenis Ujroh</h5></td>
+                                                <td><h5 class="">Jumlah</h5></td>
+                                                <td><h5 class="">ID Jemaah</h5></td>
+                                                <td><h5 class="">Nama Jemaah</h5></td>
+                                                <td><h5 class="">Status</h5></td>
+                                                <td><h5 class="">Action</h5></td>
+
+                                            </tr>    
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                            foreach($rows_ujroh as $row_ujroh) {
+
+                                                if($row_ujroh->status==0){
+                                                    $status = "Belum Dibayar";
+                                                }
+                                                else{
+                                                    $status = " Sudah Dibayar";
+                                                }
+                                            ?>
+                                            <tr>
+                                                <td><h5 class=""><?=$row_ujroh->tanggal?></h5></td>
+                                                <td><h5 class=""><?=$row_ujroh->jenis_ujroh?></h5></td>
+                                                <td><?php if($row_ujroh->jenis_ujroh=="Ujroh"){?><h5 class=""><?=number_format($row_ujroh->nominal_ujroh)?></h5><?php } ?></td>
+                                                <td><h5 class=""><?=$row_ujroh->user_id_jemaah?></h5></td>
+                                                <td><h5 class=""><?=$row_ujroh->nama?></h5></td>
+                                                <td><h5 class=""><?=$status?></h5></td>
+                                                <td><?php if($row_ujroh->jenis_ujroh=="Ujroh" && $row_ujroh->status=="0"){?><button class="btn btn-info"><a href="<?=base_url()?>Laskar/bayarUjrohAction/<?=$row_ujroh->id_ujroh?>/<?=$row_ujroh->user_id_laskar?>/<?=$row_ujroh->nominal_ujroh?>" class="text-white" >Bayar Ujroh</a></button><?php } ?></td>
+
+                                            </tr>
+                                            <?php } ?>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end col-->
+                
+            </div><!--end row-->
+
+
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+    <div class="modal fade" id="editTiket" tabindex="-1" aria-labelledby="exampleModalgridLabel"
+    aria-modal="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalgridLabel">Edit Tiket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="<?=base_url()?>UmrahTerjadwal/editTiketAction">
+                    <div class="row g-3">
+   
+                        <div class="col-xxl-12">
+                            <div>
+                                <label for="nomor_tiket" class="form-label">Nomor Tiket</label>
+                                <input type="hidden" class="form-control" name="id_umrah_jemaah" id="id_umrah_jemaah" value="<?=$rows->id_umrah_jemaah?>">
+                                <input type="hidden" class="form-control" name="nik" id="nik" value="<?=$rows->nik?>">
+                                <input type="text" class="form-control" name="nomor_tiket" id="nomor_tiket"
+                                    placeholder="Masukan Nama Paket" required>
+                            </div>
+                        </div><!--end col-->
+
+
+                        <div class="col-lg-12">
+                            <div class="hstack gap-2 justify-content-end">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" id="btn-add">Submit</button>
+                            </div>
+                        </div><!--end col-->
+                    </div><!--end row-->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+        $(document).ready(function (e) {
+
+            var base_url = "<?php echo base_url();?>"; // You can use full url here but I prefer like this
+            $('#example2').DataTable({
+                "pageLength": 10,
+               
+            }); // End of DataTable
+
+
+        }); // End Document Ready Function
+
+
+
+    </script>
