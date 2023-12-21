@@ -378,14 +378,6 @@
                         Souvenir
                       </label>
                     </div>
-                    <div class="form-check mb-2">
-                      <input class="form-check-input" type="checkbox" name="kain_ihrom" id="kain_ihrom" value="1" <?php
-                        if($rows->kain_ihrom==1){echo 'checked="checked"';} ?>>
-                      <label class="form-check-label" for="kain_ihrom">
-                        Kain Ihrom
-                      </label>
-                    </div>
-
                   </div>
                   <div class="col-lg-4">
                     <!-- Base Example -->
@@ -615,7 +607,13 @@
                       Koper Bagasi & Kabin
                     </label>
                   </div>
-                  
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="bantal_leher" id="bantal_leher" value="1"
+                      <?php if($rows->bantal_leher==1){echo 'checked="checked"';} ?>>
+                    <label class="form-check-label" for="bantal_leher">
+                      Bantal Leher
+                    </label>
+                  </div>
                 </div>
                 <div class="col-lg-3">
 
