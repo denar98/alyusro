@@ -33,15 +33,15 @@ class TabunganUmrah extends CI_Controller
 		$this->load->model('datatable_model');
 		$this->load->model('crud_model');
 		$this->load->model('custom_model');
+		$this->load->helper('menu_active_helper');
 	}
 
 	public function index()
 	{
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
+		$this->load->view('template/header.php', $data);
 		$this->load->view('tabungan_umrah/index.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/footer.php');
 	}
 
 	public function Listing()
@@ -51,10 +51,10 @@ class TabunganUmrah extends CI_Controller
 			redirect('Dashboard');
 		}
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('tabungan_umrah/listing.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('tabungan_umrah/listing.php');
+		$this->load->view('template/footer.php');
 	}
 	public function detailListing($nik)
 	{
@@ -64,12 +64,12 @@ class TabunganUmrah extends CI_Controller
 		}
 		$data['rows'] = $this->custom_model->getDetailListingTabunganUmrah($nik)->row();
 		$data['rows_history'] = $this->custom_model->getHistoryTabunganUmrah($nik)->result();
-	
-		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('tabungan_umrah/detail_listing.html',$data);
-		$this->load->view('template/footer.html');
 
+		$data['informasi_text'] = $this->db->get("informasi_text")->row();
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('tabungan_umrah/detail_listing.php', $data);
+		$this->load->view('template/footer.php');
 	}
 	public function Daftar()
 	{
@@ -77,15 +77,16 @@ class TabunganUmrah extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin'  && $this->session->userdata('role') != 'Agen' && $this->session->userdata('role') != 'Admin Pendaftaran') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 		$data['kota'] = $this->db->get("kode_kota")->result();
 		$data['paket_keberangkatan'] = $this->db->get("paket_keberangkatan")->result();
 		$data['agen'] = $this->db->get("agen")->result();
 		$data['laskar'] = $this->db->get("laskar")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('tabungan_umrah/daftar.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('tabungan_umrah/daftar.php', $data);
+		$this->load->view('template/footer.php');
 	}
 	public function editListing($nik)
 	{
@@ -93,19 +94,21 @@ class TabunganUmrah extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin'  && $this->session->userdata('role') != 'Agen' && $this->session->userdata('role') != 'Admin Pendaftaran') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 		$data['kota'] = $this->db->get("kode_kota")->result();
 		$data['paket_keberangkatan'] = $this->db->get("paket_keberangkatan")->result();
 		$data['agen'] = $this->db->get("agen")->result();
 		$data['laskar'] = $this->db->get("laskar")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
 		$data['tabungan_umrah'] = $this->custom_model->getDetailListingTabunganUmrah($nik)->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('tabungan_umrah/edit.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('tabungan_umrah/edit.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
-	public function addSaldoAction(){
+	public function addSaldoAction()
+	{
 		$nik = $this->input->post('nik');
 		$tanggal_menabung = $this->input->post('tanggal_menabung');
 		$jumlah_menabung = str_replace(",", "", $this->input->post('jumlah_menabung'));
@@ -115,15 +118,15 @@ class TabunganUmrah extends CI_Controller
 		$nominal_tagihan = str_replace(",", "", $this->input->post('jumlah_menabung'));
 		$jenis_tagihan = 2;
 		$status = 0;
-	
+
 		$data = array(
-		  'tanggal' => $tanggal,
-		  'no_reg_umrah_jemaah' => $no_registrasi,
-		  'nominal_tagihan' => $nominal_tagihan,
-		  'jenis_tagihan' => $jenis_tagihan,
-		  'status' => $status,
+			'tanggal' => $tanggal,
+			'no_reg_umrah_jemaah' => $no_registrasi,
+			'nominal_tagihan' => $nominal_tagihan,
+			'jenis_tagihan' => $jenis_tagihan,
+			'status' => $status,
 		);
-	
+
 		$add = $this->crud_model->createData('tagihan_pembayaran', $data);
 
 		if ($add) {
@@ -132,12 +135,13 @@ class TabunganUmrah extends CI_Controller
 			// }
 			$this->session->set_flashdata("success", "Data Tabungan Berhasil Ditambahkan Silahkan Validasi Pembayaran !");
 			redirect('Invoice/');
-		  } else {
+		} else {
 			$this->session->set_flashdata("error", "Menambah Data Tabungan Gagal !");
-		  }
+		}
 	}
 
-	public function editSaldoAction(){
+	public function editSaldoAction()
+	{
 		$id_tabungan_umrah_jemaah = $this->input->post('id_tabungan_umrah_jemaah');
 		$nik = $this->input->post('nik');
 		$tanggal_menabung = $this->input->post('tanggal_menabung');
@@ -148,7 +152,7 @@ class TabunganUmrah extends CI_Controller
 		$nominal_tagihan = str_replace(",", "", $this->input->post('jumlah_menabung'));
 		$jenis_tagihan = 2;
 		$status = 0;
-	
+
 		$add = $this->crud_model->createData('tagihan_pembayaran', $data);
 
 		if ($add) {
@@ -157,9 +161,9 @@ class TabunganUmrah extends CI_Controller
 			// }
 			$this->session->set_flashdata("success", "Data Tabungan Berhasil Ditambahkan Silahkan Validasi Pembayaran !");
 			redirect('Invoice/');
-		  } else {
+		} else {
 			$this->session->set_flashdata("error", "Menambah Data Tabungan Gagal !");
-		  }
+		}
 	}
 
 	public function daftarAction()
@@ -189,11 +193,11 @@ class TabunganUmrah extends CI_Controller
 		$kode_agen = substr($user_id_agen, 4, 3);
 		$last_id = $this->db->limit(1)->order_by('id_jemaah', 'desc')->get("jemaah")->row();
 
-		
-		if($user_id_referall=='' || $user_id_referall == null){
+
+		if ($user_id_referall == '' || $user_id_referall == null) {
 			$user_id_referall = $user_id_agen;
 		}
-		
+
 		if ($last_id != null) {
 			$last_id_jemaah = (int) substr($last_id->user_id_jemaah, 8, 4) + 1;
 			if ($last_id_jemaah < 9) {
@@ -303,7 +307,7 @@ class TabunganUmrah extends CI_Controller
 			'no_reg_umrah_jemaah' => $no_reg_umrah_jemaah,
 		);
 
-		
+
 		$data_pendaftaran = array(
 			'no_registrasi' => $no_reg_umrah_jemaah,
 			'jenis_pendataran' => 2,
@@ -312,14 +316,14 @@ class TabunganUmrah extends CI_Controller
 			'status_pendaftaran' => '0'
 		);
 
-		
-		$history_tabungan = $this->db->where('no_reg_umrah_jemaah',$no_reg_umrah_jemaah)->order_by('id_tabungan_umrah_jemaah','desc')->limit(1)->get('tabungan_umrah_jemaah')->row();
 
-	
-	
+		$history_tabungan = $this->db->where('no_reg_umrah_jemaah', $no_reg_umrah_jemaah)->order_by('id_tabungan_umrah_jemaah', 'desc')->limit(1)->get('tabungan_umrah_jemaah')->row();
+
+
+
 		$saldo_tabungan =  0;
-		
-		
+
+
 
 		$data_tabungan_umrah = array(
 			'no_reg_umrah_jemaah' => $no_reg_umrah_jemaah,
@@ -332,7 +336,6 @@ class TabunganUmrah extends CI_Controller
 		$check_nik = $this->db->where('nik', $nik)->get('jemaah')->row();
 		if ($check_nik == null) {
 			$query_jemaah = $this->crud_model->createData('jemaah', $data_jemaah);
-
 		} else {
 			$where = "nik=" . $nik;
 			$query_jemaah = $this->crud_model->updateData('jemaah', $data_jemaah, $where);
@@ -384,11 +387,11 @@ class TabunganUmrah extends CI_Controller
 		$kode_agen = substr($user_id_agen, 4, 3);
 		$last_id = $this->db->limit(1)->order_by('id_jemaah', 'desc')->get("jemaah")->row();
 
-		
-		if($user_id_referall=='' || $user_id_referall == null){
+
+		if ($user_id_referall == '' || $user_id_referall == null) {
 			$user_id_referall = $user_id_agen;
 		}
-		
+
 
 
 		$file_name = str_replace('.', '', $nik);
@@ -447,19 +450,19 @@ class TabunganUmrah extends CI_Controller
 			'status' => '0'
 		);
 
-		
-	
 
 
-			$where = "nik=" . $nik;
-			$query_jemaah = $this->crud_model->updateData('jemaah', $data_jemaah, $where);
-		
+
+
+		$where = "nik=" . $nik;
+		$query_jemaah = $this->crud_model->updateData('jemaah', $data_jemaah, $where);
+
 
 		if ($query_jemaah) {
 			$where = "no_reg_umrah_jemaah=" . $nik;
 			$update_umrah_jemaah = $this->crud_model->updateData('umrah_jemaah', $data_umrah_jemaah, $where);
 			if ($update_umrah_jemaah) {
-				$update_tagihan_pembayaran = $this->crud_model->updateData('tagihan_pembayaran', $data_tagihan_pembayaran,$where );
+				$update_tagihan_pembayaran = $this->crud_model->updateData('tagihan_pembayaran', $data_tagihan_pembayaran, $where);
 				// $add_tabungan_umrah = $this->crud_model->createData('tabungan_umrah_jemaah', $data_tabungan_umrah);
 				$this->session->set_flashdata("success", "Data Tabungan Umrah Jemaah Berhasil Diubah !");
 				redirect('TabunganUmrah/Listing');
@@ -508,7 +511,7 @@ class TabunganUmrah extends CI_Controller
 			$this->db->order_by($order, $dir);
 		}
 
-		$x=0;
+		$x = 0;
 		foreach ($valid_columns as $sterm) // loop kolom 
 		{
 			if (!empty($search)) // jika datatable mengirim POST untuk search
@@ -532,7 +535,7 @@ class TabunganUmrah extends CI_Controller
 		foreach ($tagihan_pembayaran->result() as $rows) {
 
 
-			
+
 			$data[] = array(
 				$rows->user_id_agen,
 				$rows->user_id_referall,
@@ -540,7 +543,7 @@ class TabunganUmrah extends CI_Controller
 				$rows->nama,
 				$rows->terakhir_menabung,
 				number_format($rows->total_saldo_jemaah),
-				'<a href="' . base_url() . 'TabunganUmrah/editListing/' . $rows->nik . '" class="btn btn-warning mr-2" style="margin-right:5px;"  title="Edit"><span> Edit</span></a><a href="' . base_url() . 'TabunganUmrah/hapusListing/' . $rows->nik . '/'.$rows->no_reg_umrah_jemaah.'" class="btn btn-danger mr-2" style="margin-right:5px;"  title="Hapus"><span> Hapus</span></a><a href="' . base_url() . 'TabunganUmrah/detailListing/' . $rows->nik . '" class="btn btn-info ml-1"  title="Detail"><span> Detail </span></a>'
+				'<a href="' . base_url() . 'TabunganUmrah/editListing/' . $rows->nik . '" class="btn btn-warning mr-2" style="margin-right:5px;"  title="Edit"><span> Edit</span></a><a href="' . base_url() . 'TabunganUmrah/hapusListing/' . $rows->nik . '/' . $rows->no_reg_umrah_jemaah . '" class="btn btn-danger mr-2" style="margin-right:5px;"  title="Hapus"><span> Hapus</span></a><a href="' . base_url() . 'TabunganUmrah/detailListing/' . $rows->nik . '" class="btn btn-info ml-1"  title="Detail"><span> Detail </span></a>'
 			);
 
 			$i++;
@@ -568,47 +571,46 @@ class TabunganUmrah extends CI_Controller
 
 	public function getHistoryMenabungById()
 	{
-	  $id_tabungan_umrah_jemaah = $this->input->post('id_tabungan_umrah_jemaah');
-	  $where = "id_tabungan_umrah_jemaah=" . $id_tabungan_umrah_jemaah;
-	  $history_menabung = $this->crud_model->readData('*', 'tabungan_umrah_jemaah', $where)->row();
-	  echo json_encode($history_menabung);
-  
+		$id_tabungan_umrah_jemaah = $this->input->post('id_tabungan_umrah_jemaah');
+		$where = "id_tabungan_umrah_jemaah=" . $id_tabungan_umrah_jemaah;
+		$history_menabung = $this->crud_model->readData('*', 'tabungan_umrah_jemaah', $where)->row();
+		echo json_encode($history_menabung);
 	}
-	public function hapusListing($nik,$no_reg_umrah_jemaah)
+	public function hapusListing($nik, $no_reg_umrah_jemaah)
 	{
-	//   $where = "nik_jemaah=" . $nik;
-	  $delete = $this->crud_model->deleteData('umrah_jemaah', "nik_jemaah=" . $nik);
-	  $delete = $this->crud_model->deleteData('jemaah', "nik=" . $nik);
-	  $delete = $this->crud_model->deleteData('kelengkapan_umrah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah ."'");
-	  $delete = $this->crud_model->deleteData('manifestasi_umrah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah."'");
-	  $delete = $this->crud_model->deleteData('pendaftaran', "nik=" . $nik);
-	  $delete = $this->crud_model->deleteData('tagihan_pembayaran', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah."'");
-	  $delete = $this->crud_model->deleteData('tabungan_umrah_jemaah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah."'");
+		//   $where = "nik_jemaah=" . $nik;
+		$delete = $this->crud_model->deleteData('umrah_jemaah', "nik_jemaah=" . $nik);
+		$delete = $this->crud_model->deleteData('jemaah', "nik=" . $nik);
+		$delete = $this->crud_model->deleteData('kelengkapan_umrah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah . "'");
+		$delete = $this->crud_model->deleteData('manifestasi_umrah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah . "'");
+		$delete = $this->crud_model->deleteData('pendaftaran', "nik=" . $nik);
+		$delete = $this->crud_model->deleteData('tagihan_pembayaran', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah . "'");
+		$delete = $this->crud_model->deleteData('tabungan_umrah_jemaah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah . "'");
 
 
-	  if ($delete) {
-		$this->session->set_flashdata("success", "Data Tabungan Umrah Berhasil Dihapus !");
-		redirect('TabunganUmrah/Listing');
-	  } else {
-		$this->session->set_flashdata("error", "Menghapus Tabungan Umrah Gagal !");
-	  }
+		if ($delete) {
+			$this->session->set_flashdata("success", "Data Tabungan Umrah Berhasil Dihapus !");
+			redirect('TabunganUmrah/Listing');
+		} else {
+			$this->session->set_flashdata("error", "Menghapus Tabungan Umrah Gagal !");
+		}
 	}
 	public function jadiUmrahTerjadwal($no_reg_umrah_jemaah)
 	{
-	//   $where = "nik_jemaah=" . $nik;
-	$data_umrah_jemaah = array(
-		'jenis_umrah' => 1,
-	);
+		//   $where = "nik_jemaah=" . $nik;
+		$data_umrah_jemaah = array(
+			'jenis_umrah' => 1,
+		);
 
-	  $update = $this->crud_model->updateData('umrah_jemaah', $data_umrah_jemaah, "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah."'");
-	
+		$update = $this->crud_model->updateData('umrah_jemaah', $data_umrah_jemaah, "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah . "'");
 
 
-	  if ($update) {
-		$this->session->set_flashdata("success", "Data Berhasil Pindah Ke Umrah Terjadwal Berhasil !");
-		redirect('UmrahTerjadwal/Listing');
-	  } else {
-		$this->session->set_flashdata("error", "Data Gagal Pindah Ke Umrah Terjadwal !");
-	  }
+
+		if ($update) {
+			$this->session->set_flashdata("success", "Data Berhasil Pindah Ke Umrah Terjadwal Berhasil !");
+			redirect('UmrahTerjadwal/Listing');
+		} else {
+			$this->session->set_flashdata("error", "Data Gagal Pindah Ke Umrah Terjadwal !");
+		}
 	}
 }

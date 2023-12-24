@@ -23,41 +23,44 @@ class Invoice extends CI_Controller
   public function __construct()
   {
     parent::__construct();
-		date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('Asia/Jakarta');
     if ($this->session->userdata('login_status') != 'logged') {
       $this->session->set_flashdata("error", 'Harap Login Untuk Mengakses Halaman Ini');
       redirect('Login');
     }
     if ($this->session->userdata('role') != 'Admin'  && $this->session->userdata('role') != 'Keuangan') {
-			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
-			redirect('Dashboard');
-		  }
+      $this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
+      redirect('Dashboard');
+    }
 
     $this->load->model('datatable_model');
     $this->load->model('crud_model');
     $this->load->model('custom_model');
+    $this->load->helper('menu_active_helper');
   }
 
   public function index()
   {
     if ($this->session->userdata('role') != 'Admin'  && $this->session->userdata('role') != 'Keuangan') {
-			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
-			redirect('Dashboard');
-		  }
+      $this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
+      redirect('Dashboard');
+    }
 
-      $data['informasi_text'] = $this->db->get("informasi_text")->row();
-      $this->load->view('template/header.html',$data);
-    $this->load->view('invoice/index.html');
-    $this->load->view('template/footer.html');
+    $data['informasi_text'] = $this->db->get("informasi_text")->row();
+    $this->load->view('template/header.php', $data);
+    $this->load->view('template/sidebar.php');
+    $this->load->view('invoice/index.php');
+    $this->load->view('template/footer.php');
   }
   public function tambahInvoice()
   {
-    
-		$data['pendaftaran'] = $this->db->get("pendaftaran")->result();
+
+    $data['pendaftaran'] = $this->db->get("pendaftaran")->result();
     $data['informasi_text'] = $this->db->get("informasi_text")->row();
-    $this->load->view('template/header.html',$data);
-    $this->load->view('invoice/tambah_invoice.html',$data);
-    $this->load->view('template/footer.html');
+    $this->load->view('template/header.php', $data);
+    $this->load->view('template/sidebar.php');
+    $this->load->view('invoice/tambah_invoice.php', $data);
+    $this->load->view('template/footer.php');
   }
   public function detailInvoice($id_tagihan_pembayaran)
   {
@@ -65,9 +68,10 @@ class Invoice extends CI_Controller
     $data['rows'] = $this->custom_model->getDetailInvoice($id_tagihan_pembayaran)->row();
 
     $data['informasi_text'] = $this->db->get("informasi_text")->row();
-    $this->load->view('template/header.html',$data);
-    $this->load->view('invoice/detail_invoice.html', $data);
-    $this->load->view('template/footer.html');
+    $this->load->view('template/header.php', $data);
+    $this->load->view('template/sidebar.php');
+    $this->load->view('invoice/detail_invoice.php', $data);
+    $this->load->view('template/footer.php');
   }
 
   public function getAllInvoice()
@@ -136,14 +140,12 @@ class Invoice extends CI_Controller
         $tujuan = "Umrah Terjadwal";
       } else if ($rows->jenis_tagihan == 2) {
         $tujuan = "Tabungan";
-      } 
-      else if ($rows->jenis_tagihan == 3) {
+      } else if ($rows->jenis_tagihan == 3) {
         $tujuan = "Daftar Agen";
         $nomor_id = $rows->user_id_agen;
         $atas_nama = $rows->atas_nama_agen;
         $no_rekening = $rows->no_rekening_agen;
-      }
-      else if ($rows->jenis_tagihan == 4) {
+      } else if ($rows->jenis_tagihan == 4) {
         $tujuan = "Donasi	";
         // $nama = $rows->nama_donasi;
         $atas_nama = $rows->atas_nama_donasi;
@@ -178,16 +180,16 @@ class Invoice extends CI_Controller
   public function totalInvoice()
   {
     $query = $this->db->select('COUNT(*) as num')
-    ->from('tagihan_pembayaran')
-    ->join("pendaftaran","pendaftaran.no_registrasi = tagihan_pembayaran.no_reg_umrah_jemaah")
-    ->join("jemaah","pendaftaran.nik = jemaah.nik")
-    ->join("umrah_jemaah","umrah_jemaah.nik_jemaah = jemaah.nik")
-    ->join("agen","agen.nik_agen = jemaah.nik","left")
-    ->join("donasi","donasi.nik = jemaah.nik","left")
-    ->order_by('tagihan_pembayaran.tanggal','desc')
-    ->where("tagihan_pembayaran.status",0)
-    // ->limit(1)
-    ->get();
+      ->from('tagihan_pembayaran')
+      ->join("pendaftaran", "pendaftaran.no_registrasi = tagihan_pembayaran.no_reg_umrah_jemaah")
+      ->join("jemaah", "pendaftaran.nik = jemaah.nik")
+      ->join("umrah_jemaah", "umrah_jemaah.nik_jemaah = jemaah.nik")
+      ->join("agen", "agen.nik_agen = jemaah.nik", "left")
+      ->join("donasi", "donasi.nik = jemaah.nik", "left")
+      ->order_by('tagihan_pembayaran.tanggal', 'desc')
+      ->where("tagihan_pembayaran.status", 0)
+      // ->limit(1)
+      ->get();
 
 
     $result = $query->row();
@@ -213,12 +215,12 @@ class Invoice extends CI_Controller
     );
 
     // $data_tabungan_umrah = array(
-		// 	'no_reg_umrah_jemaah' => $no_registrasi,
-		// 	'tanggal_menabung' => $tanggal,
-		// 	'jumlah_menabung' => $nominal_tagihan,
-		// 	'status_pembayaran' => '0',
+    // 	'no_reg_umrah_jemaah' => $no_registrasi,
+    // 	'tanggal_menabung' => $tanggal,
+    // 	'jumlah_menabung' => $nominal_tagihan,
+    // 	'status_pembayaran' => '0',
     //   'goal_terakhir' => '-'
-		// );
+    // );
 
     $add = $this->crud_model->createData('tagihan_pembayaran', $data);
     if ($add) {
@@ -230,7 +232,6 @@ class Invoice extends CI_Controller
     } else {
       $this->session->set_flashdata("error", "Menambah Data Invoice Gagal !");
     }
-
   }
 
   public function updateAction()
@@ -275,6 +276,5 @@ class Invoice extends CI_Controller
     $no_registrasi = $this->input->post('no_registrasi');
     $rows = $this->custom_model->getDataInvoice($no_registrasi)->row();
     echo json_encode($rows);
-
   }
 }

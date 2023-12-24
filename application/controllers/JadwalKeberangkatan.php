@@ -23,7 +23,7 @@ class JadwalKeberangkatan extends CI_Controller
   public function __construct()
   {
     parent::__construct();
-		date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('Asia/Jakarta');
     if ($this->session->userdata('login_status') != 'logged') {
       $this->session->set_flashdata("error", 'Harap Login Untuk Mengakses Halaman Ini');
       redirect('Login');
@@ -35,14 +35,16 @@ class JadwalKeberangkatan extends CI_Controller
     $this->load->model('datatable_model');
     $this->load->model('crud_model');
     $this->load->model('custom_model');
+    $this->load->helper('menu_active_helper');
   }
 
   public function index()
   {
     $data['informasi_text'] = $this->db->get("informasi_text")->row();
-    $this->load->view('template/header.html',$data);
-    $this->load->view('jadwal_keberangkatan/index.html');
-    $this->load->view('template/footer.html');
+    $this->load->view('template/header.php', $data);
+    $this->load->view('template/sidebar.php');
+    $this->load->view('jadwal_keberangkatan/index.php');
+    $this->load->view('template/footer.php');
   }
 
   public function getAllJadwalKeberangkatan()
@@ -82,22 +84,22 @@ class JadwalKeberangkatan extends CI_Controller
       $this->db->order_by($order, $dir);
     }
 
-    $x=0;
-		foreach ($valid_columns as $sterm) // loop kolom 
+    $x = 0;
+    foreach ($valid_columns as $sterm) // loop kolom 
     {
-        if (!empty($search)) // jika datatable mengirim POST untuk search
+      if (!empty($search)) // jika datatable mengirim POST untuk search
+      {
+        if ($x === 0) // looping pertama
         {
-            if ($x === 0) // looping pertama
-            {
-                $this->db->group_start();
-                $this->db->like($sterm, $search);
-            } else {
-                $this->db->or_like($sterm, $search);
-            }
-            if (count($valid_columns) - 1 == $x) //looping terakhir
-                $this->db->group_end();
+          $this->db->group_start();
+          $this->db->like($sterm, $search);
+        } else {
+          $this->db->or_like($sterm, $search);
         }
-        $x++;
+        if (count($valid_columns) - 1 == $x) //looping terakhir
+          $this->db->group_end();
+      }
+      $x++;
     }
 
     $this->db->limit($length, $start);
@@ -163,7 +165,6 @@ class JadwalKeberangkatan extends CI_Controller
     } else {
       $this->session->set_flashdata("error", "Menambah Data Jadwal Keberangkatan Gagal !");
     }
-
   }
 
   public function updateAction()
@@ -211,6 +212,5 @@ class JadwalKeberangkatan extends CI_Controller
     $where = "id_paket_keberangkatan=" . $id_paket_keberangkatan;
     $jadwal_keberangkatan = $this->crud_model->readData('*', 'paket_keberangkatan', $where)->row();
     echo json_encode($jadwal_keberangkatan);
-
   }
 }

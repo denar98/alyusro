@@ -32,15 +32,15 @@ class Laskar extends CI_Controller
 		$this->load->model('datatable_model');
 		$this->load->model('crud_model');
 		$this->load->model('custom_model');
+		$this->load->helper('menu_active');
 	}
 
 	public function index()
 	{
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
+		$this->load->view('template/header.php', $data);
 		$this->load->view('umrah_terjadwal/index.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/footer.php');
 	}
 	public function Listing()
 	{
@@ -49,10 +49,10 @@ class Laskar extends CI_Controller
 			redirect('Dashboard');
 		}
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('laskar/listing.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('laskar/listing.php');
+		$this->load->view('template/footer.php');
 	}
 	public function detailLaskar($id_laskar)
 	{
@@ -62,21 +62,21 @@ class Laskar extends CI_Controller
 		}
 		$laskar_rows = $this->custom_model->getDetailLaskar($id_laskar)->row();
 		$data['rows'] = $this->custom_model->getDetailLaskar($id_laskar)->row();
-	
-		$where_belum_bayar_ujroh = "user_id_jemaah='".$laskar_rows->user_id_laskar."' AND jenis_ujroh = 'Ujroh' AND status='0' ";
+
+		$where_belum_bayar_ujroh = "user_id_jemaah='" . $laskar_rows->user_id_laskar . "' AND jenis_ujroh = 'Ujroh' AND status='0' ";
 		$data['ujroh_belum_bayar'] = $this->db->select('SUM(nominal_ujroh) as nominal')->where($where_belum_bayar_ujroh)->get('ujroh')->row();
-		
-		$where_sudah_bayar_ujroh = "user_id_jemaah='".$laskar_rows->user_id_laskar."' AND jenis_ujroh = 'Ujroh' AND status='1' ";
+
+		$where_sudah_bayar_ujroh = "user_id_jemaah='" . $laskar_rows->user_id_laskar . "' AND jenis_ujroh = 'Ujroh' AND status='1' ";
 		$data['ujroh_sudah_bayar'] = $this->db->select('SUM(nominal_ujroh) as nominal')->where($where_sudah_bayar_ujroh)->get('ujroh')->row();
-		
+
 
 		$data['rows_ujroh'] = $this->custom_model->getHistoryUjrohLaskar($laskar_rows->user_id_laskar)->result();
 
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('laskar/detail_listing.html',$data);
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('laskar/detail_listing.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function Daftar()
@@ -84,18 +84,19 @@ class Laskar extends CI_Controller
 		$data['kota'] = $this->db->get("kode_kota")->result();
 		$data['jemaah'] = $this->db->where('user_id_jemaah != "-"')->get("jemaah")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
+		$this->load->view('template/header.php', $data);
 		$this->load->view('laskar/daftar.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/footer.php');
 	}
 	public function TambahLaskar()
 	{
 		$data['kota'] = $this->db->get("kode_kota")->result();
 		$data['jemaah'] = $this->db->where('user_id_jemaah != "-"')->get("jemaah")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('laskar/tambah_laskar.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('laskar/tambah_laskar.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function daftarAction()
@@ -133,7 +134,6 @@ class Laskar extends CI_Controller
 			} else if ($last_id_laskar < 999) {
 				$kode_id_laskar = "" . $last_id_laskar;
 			}
-
 		} else {
 			$kode_id_laskar = "001";
 		}
@@ -242,7 +242,6 @@ class Laskar extends CI_Controller
 			exit();
 		} else {
 			$query_laskar = $this->crud_model->createData('laskar', $data_laskar);
-
 		}
 
 
@@ -292,12 +291,11 @@ class Laskar extends CI_Controller
 			} else if ($last_id_laskar < 999) {
 				$kode_id_laskar = "" . $last_id_laskar;
 			}
-
 		} else {
 			$kode_id_laskar = "001";
 		}
 		$kode_id_jemaah = substr($user_id_jemaah, 8, 4);
-		$user_id_laskar = $kode_kota . "-" . $kode_id_laskar . "-" . $kode_id_jemaah. "-A" ;
+		$user_id_laskar = $kode_kota . "-" . $kode_id_laskar . "-" . $kode_id_jemaah . "-A";
 
 
 		$last_no_reg = $this->db->limit(1)->order_by('id_pendaftaran', 'desc')->get("pendaftaran")->row();
@@ -401,10 +399,9 @@ class Laskar extends CI_Controller
 	public function getAllJemaah()
 	{
 		$nik = $this->input->post('nik');
-		$where = "nik=" . $nik ;
+		$where = "nik=" . $nik;
 		$user = $this->custom_model->getAlUmrahlJemaah($nik)->row();
 		echo json_encode($user);
-
 	}
 	public function getAllLaskar()
 	{
@@ -441,7 +438,7 @@ class Laskar extends CI_Controller
 			$this->db->order_by($order, $dir);
 		}
 
-		$x=0;
+		$x = 0;
 		foreach ($valid_columns as $sterm) // loop kolom 
 		{
 			if (!empty($search)) // jika datatable mengirim POST untuk search
@@ -464,10 +461,10 @@ class Laskar extends CI_Controller
 		$i = 1;
 		foreach ($laskar->result() as $rows) {
 
-			$where_total_ujroh = "user_id_jemaah='".$rows->user_id_laskar."' AND jenis_ujroh = 'Ujroh' ";
+			$where_total_ujroh = "user_id_jemaah='" . $rows->user_id_laskar . "' AND jenis_ujroh = 'Ujroh' ";
 			$total_ujroh = $this->db->select('SUM(nominal_ujroh) as nominal_total_ujroh')->where($where_total_ujroh)->get('ujroh')->row();
-			
-	
+
+
 			$data[] = array(
 				$rows->user_id_laskar,
 				$rows->kota,
@@ -499,32 +496,31 @@ class Laskar extends CI_Controller
 			return $result->num;
 		return 0;
 	}
-	
-  public function bayarUjrohAction($id_ujroh,$user_id_laskar,$nominal_ujroh){
-	$data_ujroh = array(
-		'status' => 1,
-	);
-	$laskar_row = $this->db->where('user_id_laskar',$user_id_laskar)->get('laskar')->row();
-	$last_saldo_laskar = $laskar_row->total_saldo_laskar;
-	$currect_saldo_laskar = $last_saldo_laskar + $nominal_ujroh;
-	$data_laskar = array(
-		'total_saldo_laskar' => $currect_saldo_laskar,
-	);
+
+	public function bayarUjrohAction($id_ujroh, $user_id_laskar, $nominal_ujroh)
+	{
+		$data_ujroh = array(
+			'status' => 1,
+		);
+		$laskar_row = $this->db->where('user_id_laskar', $user_id_laskar)->get('laskar')->row();
+		$last_saldo_laskar = $laskar_row->total_saldo_laskar;
+		$currect_saldo_laskar = $last_saldo_laskar + $nominal_ujroh;
+		$data_laskar = array(
+			'total_saldo_laskar' => $currect_saldo_laskar,
+		);
 
 
-	$where_ujroh = 'id_ujroh='.$id_ujroh;
-	$query_ujroh = $this->crud_model->updateData('ujroh', $data_ujroh,$where_ujroh);
+		$where_ujroh = 'id_ujroh=' . $id_ujroh;
+		$query_ujroh = $this->crud_model->updateData('ujroh', $data_ujroh, $where_ujroh);
 
 
-	if ($query_ujroh) {
-		$where_laskar = "user_id_laskar='" . $user_id_laskar . "'";
-		$update_jemaah = $this->crud_model->updateData('laskar', $data_laskar, $where_laskar);
-		$this->session->set_flashdata("success", "Ujroh Berhasil Dibayarkan !");
-		redirect('Laskar/detailLaskar/'.$laskar_row->id_laskar);
-	} else {
-		$this->session->set_flashdata("error", "Ujroh Gagal Dibayarkan !");
+		if ($query_ujroh) {
+			$where_laskar = "user_id_laskar='" . $user_id_laskar . "'";
+			$update_jemaah = $this->crud_model->updateData('laskar', $data_laskar, $where_laskar);
+			$this->session->set_flashdata("success", "Ujroh Berhasil Dibayarkan !");
+			redirect('Laskar/detailLaskar/' . $laskar_row->id_laskar);
+		} else {
+			$this->session->set_flashdata("error", "Ujroh Gagal Dibayarkan !");
+		}
 	}
-  }
-	
-	
 }

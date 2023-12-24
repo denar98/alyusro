@@ -33,42 +33,42 @@ class Donasi extends CI_Controller
 		$this->load->model('datatable_model');
 		$this->load->model('crud_model');
 		$this->load->model('custom_model');
+		$this->load->helper('menu_active_helper');
 	}
 
 	public function index()
 	{
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
+		$this->load->view('template/header.php', $data);
 		$this->load->view('donasi/index.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/footer.php');
 	}
 	public function Listing()
 	{
 		if ($this->session->userdata('role') != 'Admin') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 
-		  $data['informasi_text'] = $this->db->get("informasi_text")->row();
-		  $this->load->view('template/header.html',$data);
-		$this->load->view('donasi/listing.html');
-		$this->load->view('template/footer.html');
-
+		$data['informasi_text'] = $this->db->get("informasi_text")->row();
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('donasi/listing.php');
+		$this->load->view('template/footer.php');
 	}
 	public function detailListing($id_donasi)
 	{
 		if ($this->session->userdata('role') != 'Admin') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 
-		$data['rows'] = $this->db->where('id_donasi',$id_donasi)->get("donasi")->row();
+		$data['rows'] = $this->db->where('id_donasi', $id_donasi)->get("donasi")->row();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('donasi/detail_listing.html',$data);
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('donasi/detail_listing.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function Daftar()
@@ -76,13 +76,14 @@ class Donasi extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 
 		$data['jemaah'] = $this->db->get("jemaah")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('donasi/daftar.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('donasi/daftar.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function daftarAction()
@@ -142,7 +143,7 @@ class Donasi extends CI_Controller
 			'status' => '0'
 		);
 
-		
+
 		$data_pendaftaran = array(
 			'no_registrasi' => $no_reg_umrah_jemaah,
 			'jenis_pendataran' => 4,
@@ -200,7 +201,7 @@ class Donasi extends CI_Controller
 			$this->db->order_by($order, $dir);
 		}
 
-		$x=0;
+		$x = 0;
 		foreach ($valid_columns as $sterm) // loop kolom 
 		{
 			if (!empty($search)) // jika datatable mengirim POST untuk search
@@ -223,13 +224,12 @@ class Donasi extends CI_Controller
 		$i = 1;
 		foreach ($tagihan_pembayaran->result() as $rows) {
 
-			if($rows->status == 0){
+			if ($rows->status == 0) {
 				$status = "Belum di Bayar";
-			}
-			else{
+			} else {
 				$status = "Sudah di Bayar";
 			}
-			
+
 			$data[] = array(
 				$rows->tanggal_donasi,
 				$rows->no_registrasi,

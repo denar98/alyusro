@@ -23,7 +23,7 @@ class SubsidiAgen extends CI_Controller
   public function __construct()
   {
     parent::__construct();
-		date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('Asia/Jakarta');
     if ($this->session->userdata('login_status') != 'logged') {
       $this->session->set_flashdata("error", 'Harap Login Untuk Mengakses Halaman Ini');
       redirect('Login');
@@ -35,6 +35,7 @@ class SubsidiAgen extends CI_Controller
     $this->load->model('datatable_model');
     $this->load->model('crud_model');
     $this->load->model('custom_model');
+    $this->load->helper('menu_active_helper');
   }
 
   public function index()
@@ -42,11 +43,12 @@ class SubsidiAgen extends CI_Controller
     $data['subsidi_agen'] = $this->db->get("subsidi_agen")->row();
 
     $data['informasi_text'] = $this->db->get("informasi_text")->row();
-    $this->load->view('template/header.html',$data);
-    $this->load->view('subsidi_agen/index.html',$data);
-    $this->load->view('template/footer.html');
+    $this->load->view('template/header.php', $data);
+    $this->load->view('template/sidebar.php');
+    $this->load->view('subsidi_agen/index.php', $data);
+    $this->load->view('template/footer.php');
   }
- 
+
   public function getAllSubsidiAgen()
   {
     $draw = intval($this->input->post("draw"));
@@ -130,7 +132,7 @@ class SubsidiAgen extends CI_Controller
   public function addAction()
   {
     $nominal_subsidi_agen = str_replace(",", "", $this->input->post('nominal_subsidi_agen'));
-   
+
     $data = array(
       'nominal_subsidi_agen' => $nominal_subsidi_agen,
     );
@@ -141,7 +143,6 @@ class SubsidiAgen extends CI_Controller
     } else {
       $this->session->set_flashdata("error", "Menambah Data Nominal Subsidi Agen  Gagal !");
     }
-
   }
 
   public function updateAction()
@@ -180,6 +181,5 @@ class SubsidiAgen extends CI_Controller
     $where = "id_subsidi_agen=" . $id_subsidi_agen;
     $subsidi_agen = $this->crud_model->readData('*', 'subsidi_agen', $where)->row();
     echo json_encode($subsidi_agen);
-
   }
 }

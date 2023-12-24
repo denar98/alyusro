@@ -1,7 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class UmrahTerjadwal extends CI_Controller
 {
 
@@ -33,15 +35,15 @@ class UmrahTerjadwal extends CI_Controller
 		$this->load->model('datatable_model');
 		$this->load->model('crud_model');
 		$this->load->model('custom_model');
+		$this->load->helper('menu_active_helper');
 	}
 
 	public function index()
 	{
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
+		$this->load->view('template/header.php', $data);
 		$this->load->view('umrah_terjadwal/index.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/footer.php');
 	}
 	public function detailListing($nik)
 	{
@@ -49,24 +51,22 @@ class UmrahTerjadwal extends CI_Controller
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
 		}
-		$rows_umrah_jemaah= $this->custom_model->getDetailListingUmrah($nik)->row();
-		$pasangan_umrah = $this->db->where('user_id_jemaah = "'.$rows_umrah_jemaah->user_id_jemaah.'"')->get("pasangan_umrah")->row();
+		$rows_umrah_jemaah = $this->custom_model->getDetailListingUmrah($nik)->row();
+		$pasangan_umrah = $this->db->where('user_id_jemaah = "' . $rows_umrah_jemaah->user_id_jemaah . '"')->get("pasangan_umrah")->row();
 		$data['rows'] = $this->custom_model->getDetailListingUmrah($nik)->row();
 		$data['jemaah'] = $this->db->where('user_id_jemaah != "-"')->get("jemaah")->result();
-		if($pasangan_umrah == ""){
+		if ($pasangan_umrah == "") {
 			$parent_user_id_jemaah = '0';
-		}
-		else{
+		} else {
 			$parent_user_id_jemaah = $pasangan_umrah->parent_user_id_jemaah;
-
 		}
-		$data['pasangan_umrah'] = $this->custom_model->getPasanganUmrah($rows_umrah_jemaah->user_id_jemaah,$parent_user_id_jemaah)->result();
-	
-		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('umrah_terjadwal/detail_listing.html',$data);
-		$this->load->view('template/footer.html');
+		$data['pasangan_umrah'] = $this->custom_model->getPasanganUmrah($rows_umrah_jemaah->user_id_jemaah, $parent_user_id_jemaah)->result();
 
+		$data['informasi_text'] = $this->db->get("informasi_text")->row();
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('umrah_terjadwal/detail_listing.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function Listing()
@@ -76,10 +76,10 @@ class UmrahTerjadwal extends CI_Controller
 			redirect('Dashboard');
 		}
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('umrah_terjadwal/listing.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('umrah_terjadwal/listing.php');
+		$this->load->view('template/footer.php');
 	}
 
 	public function ListingJemaah()
@@ -89,10 +89,10 @@ class UmrahTerjadwal extends CI_Controller
 			redirect('Dashboard');
 		}
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('umrah_terjadwal/listing_jemaah.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('umrah_terjadwal/listing_jemaah.php');
+		$this->load->view('template/footer.php');
 	}
 
 	public function Daftar()
@@ -106,9 +106,10 @@ class UmrahTerjadwal extends CI_Controller
 		$data['agen'] = $this->db->get("agen")->result();
 		$data['laskar'] = $this->db->get("laskar")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('umrah_terjadwal/daftar.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('umrah_terjadwal/daftar.php', $data);
+		$this->load->view('template/footer.php');
 	}
 	public function editListing($nik)
 	{
@@ -123,15 +124,16 @@ class UmrahTerjadwal extends CI_Controller
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
 		$data['nik'] = $nik;
 		$data['jemaah'] = $this->custom_model->getAllUmrahTerjadwalByNik($nik)->row();
-		$this->load->view('template/header.html',$data);
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
 		$this->load->view('umrah_terjadwal/edit.php', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/footer.php');
 	}
 	public function berangkatAction($id_umrah_jemaah)
 	{
 
 		$row = $this->custom_model->getDetailListingUmrahById($id_umrah_jemaah)->row();
-		$row_paket = $this->db->where('id_paket_keberangkatan',$row->id_paket_keberangkatan)->get('paket_keberangkatan')->row();
+		$row_paket = $this->db->where('id_paket_keberangkatan', $row->id_paket_keberangkatan)->get('paket_keberangkatan')->row();
 
 
 
@@ -158,34 +160,34 @@ class UmrahTerjadwal extends CI_Controller
 			$this->session->set_flashdata("error", "Proses PemberangkatanUmrah Jemaah Gagal !");
 		}
 	}
-	public function hapusPasanganUmrah($user_id_jemaah,$parent_nik)
+	public function hapusPasanganUmrah($user_id_jemaah, $parent_nik)
 	{
-		$where = "user_id_jemaah='" . $user_id_jemaah."'";
+		$where = "user_id_jemaah='" . $user_id_jemaah . "'";
 		$delete = $this->crud_model->deleteData('pasangan_umrah', $where);
 		if ($delete) {
-		$this->session->set_flashdata("success", "Pasangan Umrah Berhasil Dihapus !");
-		redirect('UmrahTerjadwal/detailListing/'.$parent_nik);
+			$this->session->set_flashdata("success", "Pasangan Umrah Berhasil Dihapus !");
+			redirect('UmrahTerjadwal/detailListing/' . $parent_nik);
 		} else {
-		$this->session->set_flashdata("error", "Menghapus Pasngan Umrah Gagal !");
+			$this->session->set_flashdata("error", "Menghapus Pasngan Umrah Gagal !");
 		}
 	}
-	public function hapusListing($nik,$no_reg_umrah_jemaah)
+	public function hapusListing($nik, $no_reg_umrah_jemaah)
 	{
-	//   $where = "nik_jemaah=" . $nik;
-	  $delete = $this->crud_model->deleteData('umrah_jemaah', "nik_jemaah=" . $nik);
-	  $delete = $this->crud_model->deleteData('jemaah', "nik=" . $nik);
-	  $delete = $this->crud_model->deleteData('kelengkapan_umrah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah ."'");
-	  $delete = $this->crud_model->deleteData('manifestasi_umrah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah."'");
-	  $delete = $this->crud_model->deleteData('pendaftaran', "nik=" . $nik);
-	  $delete = $this->crud_model->deleteData('tagihan_pembayaran', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah."'");
+		//   $where = "nik_jemaah=" . $nik;
+		$delete = $this->crud_model->deleteData('umrah_jemaah', "nik_jemaah=" . $nik);
+		$delete = $this->crud_model->deleteData('jemaah', "nik=" . $nik);
+		$delete = $this->crud_model->deleteData('kelengkapan_umrah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah . "'");
+		$delete = $this->crud_model->deleteData('manifestasi_umrah', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah . "'");
+		$delete = $this->crud_model->deleteData('pendaftaran', "nik=" . $nik);
+		$delete = $this->crud_model->deleteData('tagihan_pembayaran', "no_reg_umrah_jemaah='" . $no_reg_umrah_jemaah . "'");
 
 
-	  if ($delete) {
-		$this->session->set_flashdata("success", "Data User Berhasil Dihapus !");
-		redirect('UmrahTerjadwal/ListingJemaah');
-	  } else {
-		$this->session->set_flashdata("error", "Menghapus User Gagal !");
-	  }
+		if ($delete) {
+			$this->session->set_flashdata("success", "Data User Berhasil Dihapus !");
+			redirect('UmrahTerjadwal/ListingJemaah');
+		} else {
+			$this->session->set_flashdata("error", "Menghapus User Gagal !");
+		}
 	}
 	public function gabungkanJemaah()
 	{
@@ -194,8 +196,8 @@ class UmrahTerjadwal extends CI_Controller
 		$status_hubungan = $this->input->post('status_hubungan');
 		$nik = $this->input->post('nik');
 
-		$cek_pasangan_umrah = $this->db->where('user_id_jemaah = "'.$parent_user_id_jemaah.'"')->get('pasangan_umrah')->row();
-		if($cek_pasangan_umrah->user_id_jemaah == "" || $cek_pasangan_umrah->user_id_jemaah == NULL ){
+		$cek_pasangan_umrah = $this->db->where('user_id_jemaah = "' . $parent_user_id_jemaah . '"')->get('pasangan_umrah')->row();
+		if ($cek_pasangan_umrah->user_id_jemaah == "" || $cek_pasangan_umrah->user_id_jemaah == NULL) {
 
 			$data_pasangan_umrah_parent = array(
 				'parent_user_id_jemaah' => $parent_user_id_jemaah,
@@ -203,34 +205,31 @@ class UmrahTerjadwal extends CI_Controller
 				'status_hubungan' => "Master",
 			);
 			$add_pasangan_umrah_parent = $this->crud_model->createData('pasangan_umrah', $data_pasangan_umrah_parent);
-	
 		}
 
-		if($cek_pasangan_umrah->user_id_jemaah != $cek_pasangan_umrah->parent_user_id_jemaah){
+		if ($cek_pasangan_umrah->user_id_jemaah != $cek_pasangan_umrah->parent_user_id_jemaah) {
 			$data_pasangan_umrah = array(
 				'parent_user_id_jemaah' => $cek_pasangan_umrah->parent_user_id_jemaah,
 				'user_id_jemaah' => $user_id_jemaah,
 				'status_hubungan' => $status_hubungan,
 			);
-		}
-		else{
-						
+		} else {
+
 			$data_pasangan_umrah = array(
 				'parent_user_id_jemaah' => $parent_user_id_jemaah,
 				'user_id_jemaah' => $user_id_jemaah,
 				'status_hubungan' => $status_hubungan,
 			);
-	
 		}
 
 		// $where = "user_id_jamaah=" . $user_id_jamaah;
 		$add_pasangan_umrah = $this->crud_model->createData('pasangan_umrah', $data_pasangan_umrah);
 		if ($add_pasangan_umrah) {
 			$this->session->set_flashdata("success", "Jemaah Berhasil Digabungkan !");
-			redirect('UmrahTerjadwal/detailListing/'.$nik);
+			redirect('UmrahTerjadwal/detailListing/' . $nik);
 		} else {
 			$this->session->set_flashdata("error", "Jemaah Gagal Digabungkan !");
-			redirect('UmrahTerjadwal/detailListing/'.$nik);
+			redirect('UmrahTerjadwal/detailListing/' . $nik);
 		}
 	}
 	public function editTiketAction()
@@ -248,7 +247,7 @@ class UmrahTerjadwal extends CI_Controller
 		$update_umrah_jemaah = $this->crud_model->updateData('umrah_jemaah', $data_umrah_jemaah, $where);
 		if ($update_umrah_jemaah) {
 			$this->session->set_flashdata("success", "Nomor Tiket Berhasil Di Ubah!");
-			redirect('UmrahTerjadwal/detailListing/'.$nik);
+			redirect('UmrahTerjadwal/detailListing/' . $nik);
 		} else {
 			$this->session->set_flashdata("error", "Nomor Tiket Gagal Di Ubah !");
 		}
@@ -277,11 +276,11 @@ class UmrahTerjadwal extends CI_Controller
 		$jenis_ujroh = $this->input->post('jenis_ujroh');
 		$daftar_via = $this->input->post('daftar_via');
 		$id_paket_keberangkatan = $this->input->post('paket_keberangkatan');
-		$nominal_pembayaran = str_replace(",", "", $this->input->post('nominal_custom')); 
+		$nominal_pembayaran = str_replace(",", "", $this->input->post('nominal_custom'));
 		$kode_agen = substr($user_id_agen, 4, 3);
 		$last_id = $this->db->limit(1)->order_by('id_jemaah', 'desc')->get("jemaah")->row();
 
-		if($user_id_referall=='' || $user_id_referall == null){
+		if ($user_id_referall == '' || $user_id_referall == null) {
 			$user_id_referall = $user_id_agen;
 		}
 		if ($last_id != null) {
@@ -446,12 +445,12 @@ class UmrahTerjadwal extends CI_Controller
 		$jenis_ujroh = $this->input->post('jenis_ujroh');
 		$daftar_via = $this->input->post('daftar_via');
 		$id_paket_keberangkatan = $this->input->post('paket_keberangkatan');
-		$nominal_pembayaran = str_replace(",", "", $this->input->post('nominal_custom')); 
+		$nominal_pembayaran = str_replace(",", "", $this->input->post('nominal_custom'));
 		$kode_agen = substr($user_id_agen, 4, 3);
 		$last_id = $this->db->limit(1)->order_by('id_jemaah', 'desc')->get("jemaah")->row();
 		$currect_umrah_jemaah = $this->db->where('nik_jemaah', $nik)->get('umrah_jemaah')->row();
 
-		if($user_id_referall=='' || $user_id_referall == null){
+		if ($user_id_referall == '' || $user_id_referall == null) {
 			$user_id_referall = $user_id_agen;
 		}
 		if ($last_id != null) {
@@ -543,38 +542,36 @@ class UmrahTerjadwal extends CI_Controller
 
 		$where = "nik=" . $nik;
 		$query_jemaah = $this->crud_model->updateData('jemaah', $data_jemaah, $where);
-	
+
 		if ($query_jemaah) {
 			$where_umrah_jemaah = "nik_jemaah=" . $nik;
 			$edit_umrah_jemaah = $this->crud_model->updateData('umrah_jemaah', $data_umrah_jemaah, $where_umrah_jemaah);
 			if ($edit_umrah_jemaah) {
-				$where_tagihan_pembayaran = "no_reg_umrah_jemaah='" . $currect_umrah_jemaah->no_reg_umrah_jemaah."'";
-						
-				if($currect_umrah_jemaah->nominal_pembayaran <= $nominal_pembayaran){
-					if($currect_umrah_jemaah->status_pembayaran==1){
+				$where_tagihan_pembayaran = "no_reg_umrah_jemaah='" . $currect_umrah_jemaah->no_reg_umrah_jemaah . "'";
+
+				if ($currect_umrah_jemaah->nominal_pembayaran <= $nominal_pembayaran) {
+					if ($currect_umrah_jemaah->status_pembayaran == 1) {
 						$data_tagihan_pembayaran = array(
 							'no_reg_umrah_jemaah' => $no_reg_umrah_jemaah,
 							'nominal_tagihan' => $nominal_pembayaran - $currect_umrah_jemaah->nominal_pembayaran,
 							'jenis_tagihan' => '1',
 							'tanggal' => Date("Y-m-d"),
 							'status' => '0'
-						);	
+						);
 						$add_tagihan_pembayaran = $this->crud_model->createData('tagihan_pembayaran', $data_tagihan_pembayaran);
-					}else{
+					} else {
 						$data_tagihan_pembayaran = array(
 							'nominal_tagihan' => $nominal_pembayaran,
-						);		
+						);
 						$edit_tagihan_pembayaran = $this->crud_model->updateData('tagihan_pembayaran', $data_tagihan_pembayaran, $where_tagihan_pembayaran);
-	
 					}
-				}
-				else{
+				} else {
 					$data_tagihan_pembayaran = array(
 						'nominal_tagihan' => $nominal_pembayaran,
-					);		
+					);
 					$edit_tagihan_pembayaran = $this->crud_model->updateData('tagihan_pembayaran', $data_tagihan_pembayaran, $where_tagihan_pembayaran);
 				}
-				
+
 				$this->session->set_flashdata("success", "Data Umrah Terjadwal Jemaah Di Edit Ditambahkan !");
 				redirect('UmrahTerjadwal/Listing');
 			} else {
@@ -622,7 +619,7 @@ class UmrahTerjadwal extends CI_Controller
 			$this->db->order_by($order, $dir);
 		}
 
-		$x=0;
+		$x = 0;
 		foreach ($valid_columns as $sterm) // loop kolom 
 		{
 			if (!empty($search)) // jika datatable mengirim POST untuk search
@@ -646,7 +643,7 @@ class UmrahTerjadwal extends CI_Controller
 		foreach ($tagihan_pembayaran->result() as $rows) {
 
 
-			
+
 			$data[] = array(
 				$rows->user_id_agen,
 				$rows->user_id_jemaah,
@@ -716,7 +713,7 @@ class UmrahTerjadwal extends CI_Controller
 			$this->db->order_by($order, $dir);
 		}
 
-		$x=0;
+		$x = 0;
 		foreach ($valid_columns as $sterm) // loop kolom 
 		{
 			if (!empty($search)) // jika datatable mengirim POST untuk search
@@ -739,16 +736,14 @@ class UmrahTerjadwal extends CI_Controller
 		$i = 1;
 		foreach ($tagihan_pembayaran->result() as $rows) {
 
-			if($rows->status_umrah==0){
+			if ($rows->status_umrah == 0) {
 				$status = "Non-Booking";
-			}
-			else if($rows->status_umrah==1){
+			} else if ($rows->status_umrah == 1) {
 				$status = "Booking";
-			}
-			else{
+			} else {
 				$status = "Sudah Berangkat";
 			}
-			
+
 			$data[] = array(
 				$rows->user_id_agen,
 				$rows->user_id_jemaah,
@@ -780,35 +775,36 @@ class UmrahTerjadwal extends CI_Controller
 			return $result->num;
 		return 0;
 	}
-	public function export(){
+	public function export()
+	{
 
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
 		// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
 		$style_col = [
-		  'font' => ['bold' => true], // Set font nya jadi bold
-		  'alignment' => [
-			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
-			'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-		  ],
-		  'borders' => [
-			'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
-			'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
-			'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
-			'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
-		  ]
+			'font' => ['bold' => true], // Set font nya jadi bold
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
 		];
 		// Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
 		$style_row = [
-		  'alignment' => [
-			'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-		  ],
-		  'borders' => [
-			'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
-			'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
-			'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
-			'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
-		  ]
+			'alignment' => [
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
 		];
 		$sheet->setCellValue('A1', "DATA UMRAH JEMAAH"); // Set kolom A1 dengan tulisan "DATA SISWA"
 		$sheet->mergeCells('A1:G1'); // Set Merge Cell pada kolom A1 sampai E1
@@ -834,26 +830,26 @@ class UmrahTerjadwal extends CI_Controller
 		$umrah_terjadwal = $this->custom_model->getAllUmrahTerjadwal()->result();
 		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
 		$numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
-		foreach($umrah_terjadwal as $data){ // Lakukan looping pada variabel siswa
-		  $sheet->setCellValue('A'.$numrow, $data->user_id_agen);
-		  $sheet->setCellValue('B'.$numrow, $data->user_id_referall);
-		  $sheet->setCellValue('C'.$numrow, $data->user_id_jemaah);
-		  $sheet->setCellValue('D'.$numrow, $data->nama);
-		  $sheet->setCellValue('E'.$numrow, $data->tanggal_keberangkatan);
-		  $sheet->setCellValue('F'.$numrow, $data->status_booking);
-		  $sheet->setCellValue('G'.$numrow, $data->total_saldo_jemaah);
-		  
-		  // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
-		  $sheet->getStyle('A'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('B'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('C'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('D'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('E'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('F'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('G'.$numrow)->applyFromArray($style_row);
-		  
-		  $no++; // Tambah 1 setiap kali looping
-		  $numrow++; // Tambah 1 setiap kali looping
+		foreach ($umrah_terjadwal as $data) { // Lakukan looping pada variabel siswa
+			$sheet->setCellValue('A' . $numrow, $data->user_id_agen);
+			$sheet->setCellValue('B' . $numrow, $data->user_id_referall);
+			$sheet->setCellValue('C' . $numrow, $data->user_id_jemaah);
+			$sheet->setCellValue('D' . $numrow, $data->nama);
+			$sheet->setCellValue('E' . $numrow, $data->tanggal_keberangkatan);
+			$sheet->setCellValue('F' . $numrow, $data->status_booking);
+			$sheet->setCellValue('G' . $numrow, $data->total_saldo_jemaah);
+
+			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
+			$sheet->getStyle('A' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('B' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('C' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('D' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('E' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('F' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('G' . $numrow)->applyFromArray($style_row);
+
+			$no++; // Tambah 1 setiap kali looping
+			$numrow++; // Tambah 1 setiap kali looping
 		}
 		// Set width kolom
 		$sheet->getColumnDimension('A')->setWidth(25); // Set width kolom A
@@ -863,7 +859,7 @@ class UmrahTerjadwal extends CI_Controller
 		$sheet->getColumnDimension('E')->setWidth(30); // Set width kolom E
 		$sheet->getColumnDimension('F')->setWidth(30); // Set width kolom E
 		$sheet->getColumnDimension('G')->setWidth(30); // Set width kolom E
-		
+
 		// Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
 		$sheet->getDefaultRowDimension()->setRowHeight(-1);
 		// Set orientasi kertas jadi LANDSCAPE
@@ -876,38 +872,39 @@ class UmrahTerjadwal extends CI_Controller
 		header('Cache-Control: max-age=0');
 		$writer = new Xlsx($spreadsheet);
 		$writer->save('php://output');
-	  }
-	
-	
-	public function export_database_jemaah(){
+	}
+
+
+	public function export_database_jemaah()
+	{
 
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
 		// Buat sebuah variabel untuk menampung pengaturan style dari header tabel
 		$style_col = [
-		  'font' => ['bold' => true], // Set font nya jadi bold
-		  'alignment' => [
-			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
-			'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-		  ],
-		  'borders' => [
-			'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
-			'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
-			'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
-			'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
-		  ]
+			'font' => ['bold' => true], // Set font nya jadi bold
+			'alignment' => [
+				'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
 		];
 		// Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
 		$style_row = [
-		  'alignment' => [
-			'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-		  ],
-		  'borders' => [
-			'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
-			'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
-			'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
-			'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
-		  ]
+			'alignment' => [
+				'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+			],
+			'borders' => [
+				'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+				'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],  // Set border right dengan garis tipis
+				'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border bottom dengan garis tipis
+				'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN] // Set border left dengan garis tipis
+			]
 		];
 		$sheet->setCellValue('A1', "DATABASE JEMAAH"); // Set kolom A1 dengan tulisan "DATA SISWA"
 		$sheet->mergeCells('A1:E1'); // Set Merge Cell pada kolom A1 sampai E1
@@ -931,22 +928,22 @@ class UmrahTerjadwal extends CI_Controller
 		$umrah_terjadwal = $this->custom_model->getAllListingJemaah()->result();
 		$no = 1; // Untuk penomoran tabel, di awal set dengan 1
 		$numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
-		foreach($umrah_terjadwal as $data){ // Lakukan looping pada variabel siswa
-		  $sheet->setCellValue('A'.$numrow, $data->user_id_agen);
-		  $sheet->setCellValue('B'.$numrow, $data->user_id_jemaah);
-		  $sheet->setCellValue('C'.$numrow, $data->nama);
-		  $sheet->setCellValue('D'.$numrow, $data->tanggal_keberangkatan);
-		  $sheet->setCellValue('E'.$numrow, $data->status_booking);
-		  
-		  // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
-		  $sheet->getStyle('A'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('B'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('C'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('D'.$numrow)->applyFromArray($style_row);
-		  $sheet->getStyle('E'.$numrow)->applyFromArray($style_row);
-		  
-		  $no++; // Tambah 1 setiap kali looping
-		  $numrow++; // Tambah 1 setiap kali looping
+		foreach ($umrah_terjadwal as $data) { // Lakukan looping pada variabel siswa
+			$sheet->setCellValue('A' . $numrow, $data->user_id_agen);
+			$sheet->setCellValue('B' . $numrow, $data->user_id_jemaah);
+			$sheet->setCellValue('C' . $numrow, $data->nama);
+			$sheet->setCellValue('D' . $numrow, $data->tanggal_keberangkatan);
+			$sheet->setCellValue('E' . $numrow, $data->status_booking);
+
+			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
+			$sheet->getStyle('A' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('B' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('C' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('D' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('E' . $numrow)->applyFromArray($style_row);
+
+			$no++; // Tambah 1 setiap kali looping
+			$numrow++; // Tambah 1 setiap kali looping
 		}
 		// Set width kolom
 		$sheet->getColumnDimension('A')->setWidth(25); // Set width kolom A
@@ -967,5 +964,5 @@ class UmrahTerjadwal extends CI_Controller
 		header('Cache-Control: max-age=0');
 		$writer = new Xlsx($spreadsheet);
 		$writer->save('php://output');
-	  }
 	}
+}

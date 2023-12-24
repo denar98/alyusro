@@ -23,7 +23,7 @@ class InformasiText extends CI_Controller
   public function __construct()
   {
     parent::__construct();
-		date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set('Asia/Jakarta');
     if ($this->session->userdata('login_status') != 'logged') {
       $this->session->set_flashdata("error", 'Harap Login Untuk Mengakses Halaman Ini');
       redirect('Login');
@@ -35,18 +35,19 @@ class InformasiText extends CI_Controller
     $this->load->model('datatable_model');
     $this->load->model('crud_model');
     $this->load->model('custom_model');
+    $this->load->helper('menu_active_helper');
     $data['informasi_text'] = $this->db->get("informasi_text")->row();
-
   }
 
   public function index()
   {
     $data['informasi_text'] = $this->db->get("informasi_text")->row();
-    $this->load->view('template/header.html',$data);
-    $this->load->view('informasi_text/index.html',$data);
-    $this->load->view('template/footer.html');
+    $this->load->view('template/header.php', $data);
+    $this->load->view('template/sidebar.php');
+    $this->load->view('informasi_text/index.php', $data);
+    $this->load->view('template/footer.php');
   }
- 
+
   public function getAllInformasiText()
   {
     $draw = intval($this->input->post("draw"));
@@ -130,7 +131,7 @@ class InformasiText extends CI_Controller
   public function addAction()
   {
     $isi_informasi_text = $this->input->post('isi_informasi_text');
-   
+
     $data = array(
       'isi_informasi_text' => $isi_informasi_text,
     );
@@ -141,7 +142,6 @@ class InformasiText extends CI_Controller
     } else {
       $this->session->set_flashdata("error", "Menambah Data Informasi Text Gagal !");
     }
-
   }
 
   public function updateAction()
@@ -180,6 +180,5 @@ class InformasiText extends CI_Controller
     $where = "id_informasi_text=" . $id_informasi_text;
     $informasi_text = $this->crud_model->readData('*', 'informasi_text', $where)->row();
     echo json_encode($informasi_text);
-
   }
 }

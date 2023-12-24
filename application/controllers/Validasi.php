@@ -30,8 +30,8 @@ class Validasi extends CI_Controller
 		$this->load->model('datatable_model');
 		$this->load->model('crud_model');
 		$this->load->model('custom_model');
+		$this->load->helper('menu_active_helper');
 		date_default_timezone_set('Asia/Jakarta');
-
 	}
 
 	public function Pembayaran()
@@ -39,37 +39,39 @@ class Validasi extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Keuangan') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('validasi/pembayaran.html');
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('validasi/pembayaran.php');
+		$this->load->view('template/footer.php');
 	}
 	public function printPembayaran($id_tagihan_pembayaran)
 	{
 		if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Keuangan') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 
-		  $data['rows'] = $this->custom_model->getDetailInvoice($id_tagihan_pembayaran)->row();
-		  $data['paket_keberangkatan'] = $this->db->get("paket_keberangkatan")->result();
-		  $data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
+		$data['rows'] = $this->custom_model->getDetailInvoice($id_tagihan_pembayaran)->row();
+		$data['paket_keberangkatan'] = $this->db->get("paket_keberangkatan")->result();
+		$data['informasi_text'] = $this->db->get("informasi_text")->row();
+		$this->load->view('template/header.php', $data);
 		$this->load->view('validasi/print_pembayaran.html');
-		$this->load->view('template/footer.html');
+		$this->load->view('template/footer.php');
 	}
 	public function HistoryPembayaran()
 	{
 		if ($this->session->userdata('role') != 'Admin'  && $this->session->userdata('role') != 'Keuangan') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('validasi/history_pembayaran.html');
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('validasi/history_pembayaran.php');
+		$this->load->view('template/footer.php');
 	}
 
 	public function detailPembayaran($id_tagihan_pembayaran)
@@ -77,13 +79,14 @@ class Validasi extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Agen'  && $this->session->userdata('role') != 'Keuangan') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 		$data['rows'] = $this->custom_model->getDetailInvoice($id_tagihan_pembayaran)->row();
 		$data['paket_keberangkatan'] = $this->db->get("paket_keberangkatan")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('validasi/detail_pembayaran.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('validasi/detail_pembayaran.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function getAllValidasiPembayaran()
@@ -114,7 +117,7 @@ class Validasi extends CI_Controller
 			4 => 'tagihan_pembayaran.nominal_tagihan',
 			// 5 => ''
 		);
-		
+
 		if (!isset($valid_columns[$col])) {
 			$order = null;
 		} else {
@@ -126,22 +129,22 @@ class Validasi extends CI_Controller
 
 		$x = 0;
 
-        foreach ($valid_columns as $sterm) // loop kolom 
-        {
-            if (!empty($search)) // jika datatable mengirim POST untuk search
-            {
-                if ($x === 0) // looping pertama
-                {
-                    $this->db->group_start();
-                    $this->db->like($sterm, $search);
-                } else {
-                    $this->db->or_like($sterm, $search);
-                }
-                if (count($valid_columns) - 1 == $x) //looping terakhir
-                    $this->db->group_end();
-            }
-            $x++;
-        }
+		foreach ($valid_columns as $sterm) // loop kolom 
+		{
+			if (!empty($search)) // jika datatable mengirim POST untuk search
+			{
+				if ($x === 0) // looping pertama
+				{
+					$this->db->group_start();
+					$this->db->like($sterm, $search);
+				} else {
+					$this->db->or_like($sterm, $search);
+				}
+				if (count($valid_columns) - 1 == $x) //looping terakhir
+					$this->db->group_end();
+			}
+			$x++;
+		}
 
 
 		$this->db->limit($length, $start);
@@ -152,15 +155,15 @@ class Validasi extends CI_Controller
 
 			$user_id_agen = "-";
 			$user_id_referall = "-";
-			if($rows->jenis_tagihan!=4 && $rows->jenis_tagihan!=3){
+			if ($rows->jenis_tagihan != 4 && $rows->jenis_tagihan != 3) {
 				$user_id_agen = $rows->user_id_agen;
 				$user_id_referall = $rows->user_id_referall;
 			}
 			$action = "";
-			if($this->session->userdata('role') == 'Admin' || $this->session->userdata('role') == 'Keuangan'){
+			if ($this->session->userdata('role') == 'Admin' || $this->session->userdata('role') == 'Keuangan') {
 				$action = '<a href="' . base_url() . 'Validasi/detailPembayaran/' . $rows->id_tagihan_pembayaran . '" class="btn btn-info mr-1"  title="Detail"><span> Detail </span></a>';
 			}
-			
+
 			$data[] = array(
 				$user_id_agen,
 				$user_id_referall,
@@ -221,7 +224,7 @@ class Validasi extends CI_Controller
 			5 => 'umrah_jemaah.no_rekening',
 			// 5 => ''
 		);
-		
+
 		if (!isset($valid_columns[$col])) {
 			$order = null;
 		} else {
@@ -233,22 +236,22 @@ class Validasi extends CI_Controller
 
 		$x = 0;
 
-        foreach ($valid_columns as $sterm) // loop kolom 
-        {
-            if (!empty($search)) // jika datatable mengirim POST untuk search
-            {
-                if ($x === 0) // looping pertama
-                {
-                    $this->db->group_start();
-                    $this->db->like($sterm, $search);
-                } else {
-                    $this->db->or_like($sterm, $search);
-                }
-                if (count($valid_columns) - 1 == $x) //looping terakhir
-                    $this->db->group_end();
-            }
-            $x++;
-        }
+		foreach ($valid_columns as $sterm) // loop kolom 
+		{
+			if (!empty($search)) // jika datatable mengirim POST untuk search
+			{
+				if ($x === 0) // looping pertama
+				{
+					$this->db->group_start();
+					$this->db->like($sterm, $search);
+				} else {
+					$this->db->or_like($sterm, $search);
+				}
+				if (count($valid_columns) - 1 == $x) //looping terakhir
+					$this->db->group_end();
+			}
+			$x++;
+		}
 
 
 		$this->db->limit($length, $start);
@@ -259,19 +262,16 @@ class Validasi extends CI_Controller
 
 
 
-			if($rows->tujuan_pembayaran==1){
+			if ($rows->tujuan_pembayaran == 1) {
 				$tujuan = "Umrah Terjadwal";
-			}
-			else if($rows->tujuan_pembayaran==2){
+			} else if ($rows->tujuan_pembayaran == 2) {
 				$tujuan = "Tabungan Umrah";
-			}
-			else if($rows->tujuan_pembayaran==3){
+			} else if ($rows->tujuan_pembayaran == 3) {
 				$tujuan = "Agen";
-			}
-			else if($rows->tujuan_pembayaran==4){
+			} else if ($rows->tujuan_pembayaran == 4) {
 				$tujuan = "Donasi";
 			}
-			
+
 
 			$data[] = array(
 				$rows->tanggal_pembayaran,
@@ -279,7 +279,7 @@ class Validasi extends CI_Controller
 				$rows->no_reg_umrah_jemaah,
 				$rows->nama,
 				number_format($rows->jumlah),
-				$rows->nama_bank." | ".$rows->no_rekening ,
+				$rows->nama_bank . " | " . $rows->no_rekening,
 				// '<a href="' . base_url() . 'Validasi/detailPembayaran/' . $rows->id_history_pembayaran . '" class="btn btn-info mr-1"  title="Detail"><span> Detail </span></a>'
 			);
 
@@ -328,7 +328,7 @@ class Validasi extends CI_Controller
 			} else if ($last_id_jemaah < 10000) {
 				$kode_id_jemaah = $last_id_jemaah;
 			}
-		} else {  
+		} else {
 			$kode_id_jemaah = "0001";
 		}
 
@@ -350,15 +350,15 @@ class Validasi extends CI_Controller
 				'terakhir_menabung' => $rows->tanggal,
 			);
 
-			$history_tabungan = $this->db->where('no_reg_umrah_jemaah',$rows->no_reg_umrah_jemaah)->order_by('id_tabungan_umrah_jemaah','desc')->limit(1)->get('tabungan_umrah_jemaah')->row();
+			$history_tabungan = $this->db->where('no_reg_umrah_jemaah', $rows->no_reg_umrah_jemaah)->order_by('id_tabungan_umrah_jemaah', 'desc')->limit(1)->get('tabungan_umrah_jemaah')->row();
 
-	
-			if($history_tabungan->saldo_tabungan != '' ){
+
+			if ($history_tabungan->saldo_tabungan != '') {
 				$saldo_tabungan = $history_tabungan->saldo_tabungan + $rows->nominal_tagihan;
-			}else{
+			} else {
 				$saldo_tabungan =  $rows->nominal_tagihan;
 			}
-			
+
 
 			$data_tabungan_umrah = array(
 				'no_reg_umrah_jemaah' => $rows->no_reg_umrah_jemaah,
@@ -367,7 +367,6 @@ class Validasi extends CI_Controller
 				'saldo_tabungan' => $saldo_tabungan,
 				'status_pembayaran' => '1',
 			);
-	
 		}
 
 		$data_jemaah = array(
@@ -413,29 +412,27 @@ class Validasi extends CI_Controller
 			// if ($rows->jenis_umrah == 1 && $total_saldo_jemaah >= 1750000 && $rows->status_pembayaran == 0) {
 			// 	$add_ujroh = $this->crud_model->createData('ujroh', $data_ujroh);
 			// }
-			if($rows->jenis_tagihan==2){
+			if ($rows->jenis_tagihan == 2) {
 				$add_tabungan_umrah = $this->crud_model->createData('tabungan_umrah_jemaah', $data_tabungan_umrah);
 			}
 
 			$add_history_pembayaran = $this->crud_model->createData('history_pembayaran', $data_history_pembayaran);
-     
-	
 
-			if($rows->jenis_tagihan==1 || $rows->jenis_tagihan!=2  || $rows->jenis_tagihan!=3 || $rows->jenis_tagihan!=4){
-				if ($total_saldo_jemaah >= 2700000 && $rows->user_id_jemaah=="-") {
+
+
+			if ($rows->jenis_tagihan == 1 || $rows->jenis_tagihan != 2  || $rows->jenis_tagihan != 3 || $rows->jenis_tagihan != 4) {
+				if ($total_saldo_jemaah >= 2700000 && $rows->user_id_jemaah == "-") {
 					$where_jemaah = "nik='" . $rows->nik . "'";
 					$update_jemaah = $this->crud_model->updateData('jemaah', $data_jemaah, $where_jemaah);
 				}
-	
 			}
-			if($rows->jenis_tagihan==4){
-					$where_donasi = "nik='" . $rows->nik . "'";
-					$update_jemaah = $this->crud_model->updateData('donasi', $data_donasi, $where_donasi);
-	
+			if ($rows->jenis_tagihan == 4) {
+				$where_donasi = "nik='" . $rows->nik . "'";
+				$update_jemaah = $this->crud_model->updateData('donasi', $data_donasi, $where_donasi);
 			}
 
 			$this->session->set_flashdata("success", "Data Pembayaran Berhasil Diterima !");
-			redirect('Validasi/printPembayaran/'.$id_tagihan_pembayaran);
+			redirect('Validasi/printPembayaran/' . $id_tagihan_pembayaran);
 		} else {
 			$this->session->set_flashdata("error", "Data Pembayaran Gagal Diterima !");
 		}
@@ -538,7 +535,6 @@ class Validasi extends CI_Controller
 		} else {
 			$this->session->set_flashdata("error", "Data Pembayaran Gagal Diterima !");
 		}
-
 	}
 
 
@@ -550,11 +546,12 @@ class Validasi extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Agen' && $this->session->userdata('role') != 'Keberangkatan') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
-		  $data['informasi_text'] = $this->db->get("informasi_text")->row();
-		  $this->load->view('template/header.html',$data);
-		$this->load->view('validasi/kelengkapan.html');
-		$this->load->view('template/footer.html');
+		}
+		$data['informasi_text'] = $this->db->get("informasi_text")->row();
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('validasi/kelengkapan.php');
+		$this->load->view('template/footer.php');
 	}
 
 
@@ -592,23 +589,23 @@ class Validasi extends CI_Controller
 			$this->db->order_by($order, $dir);
 		}
 
-		$x=0;
+		$x = 0;
 		foreach ($valid_columns as $sterm) // loop kolom 
-        {
-            if (!empty($search)) // jika datatable mengirim POST untuk search
-            {
-                if ($x === 0) // looping pertama
-                {
-                    $this->db->group_start();
-                    $this->db->like($sterm, $search);
-                } else {
-                    $this->db->or_like($sterm, $search);
-                }
-                if (count($valid_columns) - 1 == $x) //looping terakhir
-                    $this->db->group_end();
-            }
-            $x++;
-        }
+		{
+			if (!empty($search)) // jika datatable mengirim POST untuk search
+			{
+				if ($x === 0) // looping pertama
+				{
+					$this->db->group_start();
+					$this->db->like($sterm, $search);
+				} else {
+					$this->db->or_like($sterm, $search);
+				}
+				if (count($valid_columns) - 1 == $x) //looping terakhir
+					$this->db->group_end();
+			}
+			$x++;
+		}
 
 		$this->db->limit($length, $start);
 		$kelengkapan_umrah = $this->custom_model->getValidasiKelengkapan($status);
@@ -650,13 +647,14 @@ class Validasi extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Agen' && $this->session->userdata('role') != 'Keberangkatan') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 		$data['rows'] = $this->custom_model->getDetailKelengkapan($id_kelengkapan)->row();
 		$data['paket_keberangkatan'] = $this->db->get("paket_keberangkatan")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('validasi/detail_kelengkapan.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('validasi/detail_kelengkapan.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function updateKelengkapanAction()
@@ -736,7 +734,6 @@ class Validasi extends CI_Controller
 			$this->session->set_flashdata("error", "Data Kelengkapan Gagal Diupdate !");
 			redirect('Validasi/detailKelengkapan/' . $id_kelengkapan);
 		}
-
 	}
 
 
@@ -745,11 +742,12 @@ class Validasi extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Agen' && $this->session->userdata('role') != 'Keberangkatan') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('validasi/manifestasi.html');
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('validasi/manifestasi.php');
+		$this->load->view('template/footer.php');
 	}
 
 	public function detailManifestasi($id_manifestasi_umrah)
@@ -757,13 +755,14 @@ class Validasi extends CI_Controller
 		if ($this->session->userdata('role') != 'Admin' && $this->session->userdata('role') != 'Agen' && $this->session->userdata('role') != 'Keberangkatan') {
 			$this->session->set_flashdata("error", 'Anda Tidak Memiliki Mengakses Ke Halaman Ini');
 			redirect('Dashboard');
-		  }
+		}
 		$data['rows'] = $this->custom_model->getDetailManifestasi($id_manifestasi_umrah)->row();
 		$data['paket_keberangkatan'] = $this->db->get("paket_keberangkatan")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('validasi/detail_manifestasi.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('validasi/detail_manifestasi.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 
@@ -803,24 +802,24 @@ class Validasi extends CI_Controller
 			$this->db->order_by($order, $dir);
 		}
 
-		$x=0;
+		$x = 0;
 		foreach ($valid_columns as $sterm) // loop kolom 
-        {
-            if (!empty($search)) // jika datatable mengirim POST untuk search
-            {
-                if ($x === 0) // looping pertama
-                {
-                    $this->db->group_start();
-                    $this->db->like($sterm, $search);
-                } else {
-                    $this->db->or_like($sterm, $search);
-                }
-                if (count($valid_columns) - 1 == $x) //looping terakhir
-                    $this->db->group_end();
-            }
-            $x++;
-        }
-		
+		{
+			if (!empty($search)) // jika datatable mengirim POST untuk search
+			{
+				if ($x === 0) // looping pertama
+				{
+					$this->db->group_start();
+					$this->db->like($sterm, $search);
+				} else {
+					$this->db->or_like($sterm, $search);
+				}
+				if (count($valid_columns) - 1 == $x) //looping terakhir
+					$this->db->group_end();
+			}
+			$x++;
+		}
+
 		$this->db->limit($length, $start);
 		$kelengkapan_umrah = $this->custom_model->getValidasiManifestasi();
 		$data = array();
@@ -909,13 +908,11 @@ class Validasi extends CI_Controller
 			$data_umrah_jemaah = array(
 				'status_manifestasi' => $status_manifestasi,
 			);
-		}
-		else{
+		} else {
 			$data_umrah_jemaah = array(
 				'status_manifestasi' => $status_manifestasi,
 				'id_paket_keberangkatan' => $id_paket_keberangkatan,
 			);
-
 		}
 
 
@@ -941,14 +938,13 @@ class Validasi extends CI_Controller
 		} else {
 			$this->session->set_flashdata("error", "Data Manifestasi Gagal Diupdate !");
 		}
-
 	}
 
 	public function submitManifestasiAction($id_manifestasi_umrah)
 	{
 		$manifestasi_umrah_rows = $this->custom_model->getDetailManifestasi($id_manifestasi_umrah)->row();
 
-		
+
 		if ($manifestasi_umrah_rows->status_manifestasi == 0) {
 			$this->session->set_flashdata("error", "Data Manifestasi Belum Lengkap!");
 			redirect('Validasi/detailManifestasi/' . $id_manifestasi_umrah);
@@ -961,11 +957,11 @@ class Validasi extends CI_Controller
 				'status_umrah' => 1,
 				'status_booking' => 'Booking'
 			);
- 
-			$row_paket = $this->db->where('id_paket_keberangkatan',$manifestasi_umrah_rows->id_paket_keberangkatan)->get('paket_keberangkatan')->row();
+
+			$row_paket = $this->db->where('id_paket_keberangkatan', $manifestasi_umrah_rows->id_paket_keberangkatan)->get('paket_keberangkatan')->row();
 			$row_subsidi_agen = $this->db->get('subsidi_agen')->row();
-			$sisa_kuota= $row_paket->sisa_kuota-1;
-			$kuota_masuk= $row_paket->kuota_masuk+1;
+			$sisa_kuota = $row_paket->sisa_kuota - 1;
+			$kuota_masuk = $row_paket->kuota_masuk + 1;
 
 			$data_kuota_paket = array(
 				'sisa_kuota' => $sisa_kuota,
@@ -992,7 +988,7 @@ class Validasi extends CI_Controller
 			$where_paket = "id_paket_keberangkatan='" . $manifestasi_umrah_rows->id_paket_keberangkatan . "'";
 			$update_umrah_jemaah = $this->crud_model->updateData('umrah_jemaah', $data_umrah_jemaah, $where_umrah_jemaah);
 
-			
+
 			if ($update_umrah_jemaah) {
 				$update_paket = $this->crud_model->updateData('paket_keberangkatan', $data_kuota_paket, $where_paket);
 				$add_ujroh = $this->crud_model->createData('ujroh', $data_ujroh);
@@ -1005,5 +1001,4 @@ class Validasi extends CI_Controller
 			}
 		}
 	}
-
 }

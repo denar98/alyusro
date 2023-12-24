@@ -32,15 +32,15 @@ class Agen extends CI_Controller
 		$this->load->model('datatable_model');
 		$this->load->model('crud_model');
 		$this->load->model('custom_model');
+		$this->load->helper('menu_active');
 	}
 
 	public function index()
 	{
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
+		$this->load->view('template/header.php', $data);
 		$this->load->view('umrah_terjadwal/index.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/footer.php');
 	}
 	public function Listing()
 	{
@@ -49,10 +49,10 @@ class Agen extends CI_Controller
 			redirect('Dashboard');
 		}
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('agen/listing.html');
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('agen/listing.php');
+		$this->load->view('template/footer.php');
 	}
 	public function detailAgen($id_agen)
 	{
@@ -62,17 +62,17 @@ class Agen extends CI_Controller
 		}
 		$agen_rows = $this->custom_model->getDetailAgen($id_agen)->row();
 		$data['rows'] = $this->custom_model->getDetailAgen($id_agen)->row();
-	
-		$where_belum_bayar_ujroh = "user_id_jemaah='".$agen_rows->user_id_agen."' AND jenis_ujroh = 'Ujroh' AND status='0' ";
+
+		$where_belum_bayar_ujroh = "user_id_jemaah='" . $agen_rows->user_id_agen . "' AND jenis_ujroh = 'Ujroh' AND status='0' ";
 		$data['ujroh_belum_bayar'] = $this->db->select('SUM(nominal_ujroh) as nominal')->where($where_belum_bayar_ujroh)->get('ujroh')->row();
-		
-		$where_sudah_bayar_ujroh = "user_id_jemaah='".$agen_rows->user_id_agen."' AND jenis_ujroh = 'Ujroh' AND status='1' ";
+
+		$where_sudah_bayar_ujroh = "user_id_jemaah='" . $agen_rows->user_id_agen . "' AND jenis_ujroh = 'Ujroh' AND status='1' ";
 		$data['ujroh_sudah_bayar'] = $this->db->select('SUM(nominal_ujroh) as nominal')->where($where_sudah_bayar_ujroh)->get('ujroh')->row();
-		
-		$where_belum_bayar_subsidi = "user_id_agen='".$agen_rows->user_id_agen."' AND status='0'";
+
+		$where_belum_bayar_subsidi = "user_id_agen='" . $agen_rows->user_id_agen . "' AND status='0'";
 		$data['subsidi_belum_bayar'] = $this->db->select('SUM(nominal_subsidi) as nominal')->where($where_belum_bayar_subsidi)->get('detail_subsidi_agen')->row();
 
-		$where_sudah_bayar_subsidi = "user_id_agen='".$agen_rows->user_id_agen."' AND status='1'";
+		$where_sudah_bayar_subsidi = "user_id_agen='" . $agen_rows->user_id_agen . "' AND status='1'";
 		$data['subsidi_sudah_bayar'] = $this->db->select('SUM(nominal_subsidi) as nominal')->where($where_sudah_bayar_subsidi)->get('detail_subsidi_agen')->row();
 
 		$data['rows_ujroh'] = $this->custom_model->getHistoryUjrohAgen($agen_rows->user_id_agen)->result();
@@ -80,10 +80,10 @@ class Agen extends CI_Controller
 
 
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('agen/detail_listing.html',$data);
-		$this->load->view('template/footer.html');
-
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('agen/detail_listing.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function Daftar()
@@ -91,18 +91,19 @@ class Agen extends CI_Controller
 		$data['kota'] = $this->db->get("kode_kota")->result();
 		$data['jemaah'] = $this->db->where('user_id_jemaah != "-"')->get("jemaah")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
+		$this->load->view('template/header.php', $data);
 		$this->load->view('agen/daftar.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/footer.php');
 	}
 	public function TambahAgen()
 	{
 		$data['kota'] = $this->db->get("kode_kota")->result();
 		$data['jemaah'] = $this->db->where('user_id_jemaah != "-"')->get("jemaah")->result();
 		$data['informasi_text'] = $this->db->get("informasi_text")->row();
-		$this->load->view('template/header.html',$data);
-		$this->load->view('agen/tambah_agen.html', $data);
-		$this->load->view('template/footer.html');
+		$this->load->view('template/header.php', $data);
+		$this->load->view('template/sidebar.php');
+		$this->load->view('agen/tambah_agen.php', $data);
+		$this->load->view('template/footer.php');
 	}
 
 	public function daftarAction()
@@ -140,7 +141,6 @@ class Agen extends CI_Controller
 			} else if ($last_id_agen < 999) {
 				$kode_id_agen = "" . $last_id_agen;
 			}
-
 		} else {
 			$kode_id_agen = "001";
 		}
@@ -249,7 +249,6 @@ class Agen extends CI_Controller
 			exit();
 		} else {
 			$query_agen = $this->crud_model->createData('agen', $data_agen);
-
 		}
 
 
@@ -299,7 +298,6 @@ class Agen extends CI_Controller
 			} else if ($last_id_agen < 999) {
 				$kode_id_agen = "" . $last_id_agen;
 			}
-
 		} else {
 			$kode_id_agen = "001";
 		}
@@ -408,10 +406,9 @@ class Agen extends CI_Controller
 	public function getAllJemaah()
 	{
 		$nik = $this->input->post('nik');
-		$where = "nik=" . $nik ;
+		$where = "nik=" . $nik;
 		$user = $this->custom_model->getAlUmrahlJemaah($nik)->row();
 		echo json_encode($user);
-
 	}
 	public function getAllAgen()
 	{
@@ -448,7 +445,7 @@ class Agen extends CI_Controller
 			$this->db->order_by($order, $dir);
 		}
 
-		$x=0;
+		$x = 0;
 		foreach ($valid_columns as $sterm) // loop kolom 
 		{
 			if (!empty($search)) // jika datatable mengirim POST untuk search
@@ -471,10 +468,10 @@ class Agen extends CI_Controller
 		$i = 1;
 		foreach ($agen->result() as $rows) {
 
-			$where_total_ujroh = "user_id_jemaah='".$rows->user_id_agen."' AND jenis_ujroh = 'Ujroh' ";
+			$where_total_ujroh = "user_id_jemaah='" . $rows->user_id_agen . "' AND jenis_ujroh = 'Ujroh' ";
 			$total_ujroh = $this->db->select('SUM(nominal_ujroh) as nominal_total_ujroh')->where($where_total_ujroh)->get('ujroh')->row();
-			
-			$where_total_subsidi = "user_id_agen='".$rows->user_id_agen."' ";
+
+			$where_total_subsidi = "user_id_agen='" . $rows->user_id_agen . "' ";
 			$total_subsidi = $this->db->select('SUM(nominal_subsidi) as nominal_total_subsidi')->where($where_total_subsidi)->get('detail_subsidi_agen')->row();
 
 			$data[] = array(
@@ -509,58 +506,58 @@ class Agen extends CI_Controller
 			return $result->num;
 		return 0;
 	}
-	
-  public function bayarUjrohAction($id_ujroh,$user_id_agen,$nominal_ujroh){
-	$data_ujroh = array(
-		'status' => 1,
-	);
-	$agen_row = $this->db->where('user_id_agen',$user_id_agen)->get('agen')->row();
-	$last_saldo_agen = $agen_row->total_saldo_agen;
-	$currect_saldo_agen = $last_saldo_agen + $nominal_ujroh;
-	$data_agen = array(
-		'total_saldo_agen' => $currect_saldo_agen,
-	);
+
+	public function bayarUjrohAction($id_ujroh, $user_id_agen, $nominal_ujroh)
+	{
+		$data_ujroh = array(
+			'status' => 1,
+		);
+		$agen_row = $this->db->where('user_id_agen', $user_id_agen)->get('agen')->row();
+		$last_saldo_agen = $agen_row->total_saldo_agen;
+		$currect_saldo_agen = $last_saldo_agen + $nominal_ujroh;
+		$data_agen = array(
+			'total_saldo_agen' => $currect_saldo_agen,
+		);
 
 
-	$where_ujroh = 'id_ujroh='.$id_ujroh;
-	$query_ujroh = $this->crud_model->updateData('ujroh', $data_ujroh,$where_ujroh);
+		$where_ujroh = 'id_ujroh=' . $id_ujroh;
+		$query_ujroh = $this->crud_model->updateData('ujroh', $data_ujroh, $where_ujroh);
 
 
-	if ($query_ujroh) {
-		$where_agen = "user_id_agen='" . $user_id_agen . "'";
-		$update_jemaah = $this->crud_model->updateData('agen', $data_agen, $where_agen);
-		$this->session->set_flashdata("success", "Ujroh Berhasil Dibayarkan !");
-		redirect('Agen/detailAgen/'.$agen_row->id_agen);
-	} else {
-		$this->session->set_flashdata("error", "Ujroh Gagal Dibayarkan !");
+		if ($query_ujroh) {
+			$where_agen = "user_id_agen='" . $user_id_agen . "'";
+			$update_jemaah = $this->crud_model->updateData('agen', $data_agen, $where_agen);
+			$this->session->set_flashdata("success", "Ujroh Berhasil Dibayarkan !");
+			redirect('Agen/detailAgen/' . $agen_row->id_agen);
+		} else {
+			$this->session->set_flashdata("error", "Ujroh Gagal Dibayarkan !");
+		}
 	}
-  }
-	
-  public function bayarSubsidiAction($id_detail_subsidi_agen,$user_id_agen,$nominal_subsidi){
-	$data_subsidi = array(
-		'status' => 1,
-	);
-	$agen_row = $this->db->where('user_id_agen',$user_id_agen)->get('agen')->row();
-	$last_saldo_agen = $agen_row->total_saldo_agen;
-	$currect_saldo_agen = $last_saldo_agen + $nominal_subsidi;
-	$data_agen = array(
-		'total_saldo_agen' => $currect_saldo_agen,
-	);
+
+	public function bayarSubsidiAction($id_detail_subsidi_agen, $user_id_agen, $nominal_subsidi)
+	{
+		$data_subsidi = array(
+			'status' => 1,
+		);
+		$agen_row = $this->db->where('user_id_agen', $user_id_agen)->get('agen')->row();
+		$last_saldo_agen = $agen_row->total_saldo_agen;
+		$currect_saldo_agen = $last_saldo_agen + $nominal_subsidi;
+		$data_agen = array(
+			'total_saldo_agen' => $currect_saldo_agen,
+		);
 
 
-	$where_subsidi = 'id_detail_subsidi_agen='.$id_detail_subsidi_agen;
-	$query_subsidi = $this->crud_model->updateData('detail_subsidi_agen', $data_subsidi,$where_subsidi);
+		$where_subsidi = 'id_detail_subsidi_agen=' . $id_detail_subsidi_agen;
+		$query_subsidi = $this->crud_model->updateData('detail_subsidi_agen', $data_subsidi, $where_subsidi);
 
 
-	if ($query_subsidi) {
-		$where_agen = "user_id_agen='" . $user_id_agen . "'";
-		$update_jemaah = $this->crud_model->updateData('agen', $data_agen, $where_agen);
-		$this->session->set_flashdata("success", "Subsidi Agen Berhasil Dibayarkan !");
-		redirect('Agen/detailAgen/'.$agen_row->id_agen);
-	} else {
-		$this->session->set_flashdata("error", "Ujroh Gagal Dibayarkan !");
+		if ($query_subsidi) {
+			$where_agen = "user_id_agen='" . $user_id_agen . "'";
+			$update_jemaah = $this->crud_model->updateData('agen', $data_agen, $where_agen);
+			$this->session->set_flashdata("success", "Subsidi Agen Berhasil Dibayarkan !");
+			redirect('Agen/detailAgen/' . $agen_row->id_agen);
+		} else {
+			$this->session->set_flashdata("error", "Ujroh Gagal Dibayarkan !");
+		}
 	}
-  }
-
-	
 }
