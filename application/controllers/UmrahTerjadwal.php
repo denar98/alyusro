@@ -641,9 +641,6 @@ class UmrahTerjadwal extends CI_Controller
 		$data = array();
 		$i = 1;
 		foreach ($tagihan_pembayaran->result() as $rows) {
-
-
-
 			$data[] = array(
 				$rows->user_id_agen,
 				$rows->user_id_jemaah,
@@ -666,6 +663,7 @@ class UmrahTerjadwal extends CI_Controller
 		echo json_encode($output);
 		exit();
 	}
+
 	public function totalUmrahTerjadwal()
 	{
 
