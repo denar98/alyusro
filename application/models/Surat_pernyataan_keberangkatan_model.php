@@ -8,6 +8,17 @@ class Surat_pernyataan_keberangkatan_model extends CI_Model
     parent::__construct();
   }
 
+  public function get_by_id($id)
+  {
+    $this->db->select('*');
+    $this->db->from($this->table);
+    $this->db->join('jemaah', 'jemaah.id_jemaah = surat_pernyataan_keberangkatan.jemaah_id');
+    $this->db->where('id', $id);
+
+    $results = $this->db->get()->row();
+    return $results;
+  }
+
   public function get_by_keyword($limit = null, $start = null, $keyword = null)
   {
     $this->db->select('*');

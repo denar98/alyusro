@@ -36,7 +36,7 @@
                 <div>
                   <input type="text" class="form-control" name="keyword" placeholder="Search..." value="<?= $keyword ?>">
                 </div>
-                <button type="submit" name="submit" class="btn btn-success d-flex align-items-center">
+                <button type="submit" name="submit" class="btn btn-primary d-flex align-items-center">
                   <i class="ri-search-line"></i>
                 </button>
               </form>
@@ -45,6 +45,7 @@
                   <tr>
                     <th>ID Jemaah</th>
                     <th>Nama Jemaah</th>
+                    <th>Tgl Dibuat</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -59,9 +60,16 @@
                           <?= $row->nama ?>
                         </td>
                         <td>
-                          <button class="btn btn-info">
+                          <?= $row->created_at ?>
+                        </td>
+                        <td>
+                          <a href="<?= base_url() ?>SuratPernyataanKeberangkatan/download/<?= $row->id ?>" class="btn btn-success">
                             <i class="ri-download-2-line me-2"></i>Unduh (.pdf)
-                          </button>
+                          </a>
+
+                          <a href="<?= base_url() ?>SuratPernyataanKeberangkatan/edit/<?= $row->id ?>" class="btn btn-warning">
+                            <i class="ri-pencil-line"></i>
+                          </a>
 
                           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#jemaah-modal-<?= $row->id ?>">
                             <i class="ri-delete-bin-line"></i>
@@ -94,6 +102,12 @@
                         </td>
                       </tr>
                     <?php endforeach ?>
+                  <?php else : ?>
+                    <tr>
+                      <td class="text-center fw-bold py-4" colspan="100%">
+                        No data found.
+                      </td>
+                    </tr>
                   <?php endif ?>
                 </tbody>
               </table>

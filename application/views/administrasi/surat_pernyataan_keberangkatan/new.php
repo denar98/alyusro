@@ -100,7 +100,7 @@
                     <a href="<?= site_url('SuratPernyataanKeberangkatan') ?>" class="btn btn-warning">
                       Kembali
                     </a>
-                    <button type="submit" class="btn btn-info" name="submit">Submit</button>
+                    <button type="submit" class="btn btn-info" name="submit">Simpan</button>
                   </div>
                 </div>
               </form>

@@ -1,0 +1,18 @@
+{
+    "glyphicons halflings": {
+        "normal": "glyphicons_halflings_normal_91a063d0f3772b152f606edc0383c99d"
+    },
+    "material design icons": {
+        "normal": "material_design_icons_normal_4473a4f6378917204d73d5e52ce43d05"
+    },
+    "boxicons": {
+        "normal": "boxicons_normal_0b9f52b40dd2cbc1d03f69a6082957e0"
+    },
+    "line awesome brands": {
+        "normal": "line_awesome_brands_normal_4d5011b840eb4d22625a6ff94ec77ef2"
+    },
+    "line awesome free": {
+        "normal": "C:\\xampp-7.4\\htdocs\\alyusro\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/line_awesome_free_normal_db5db8329f2281bd3487be7d6a540a20",
+        "900": "line_awesome_free_900_fb769bef9f98c9a272a9a00d2a781e08"
+    }
+}

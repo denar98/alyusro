@@ -11,8 +11,11 @@ function show_class($menu, $urlName)
 {
   $menu_administrasi = array(
     "SuratPernyataanKeberangkatan",
+    "SuratPernyataanKeberangkatan/new",
+    "SuratPernyataanKeberangkatan/edit",
     "SuratPengajuanUjroh",
-    "SuratPembatalanProgram"
+    "SuratPembatalanProgram",
+    "SuratPernyataanKeberangkatan/index",
   );
 
   $menu_pendaftaran = array(

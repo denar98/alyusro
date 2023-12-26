@@ -39,11 +39,12 @@
                                 <thead>
                                     <tr>
                                         <th>ID Perwakilan</th>
+                                        <!-- <th>ID Agen</th> -->
                                         <th>ID Jemaah</th>
                                         <th>Nama Jemaah</th>
-                                        <th>Rencana Berangkat</th>
                                         <th>Status</th>
                                         <th>Jumlah Pembayaran</th>
+                                        <th>Tanggal Daftar</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

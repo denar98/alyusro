@@ -105,8 +105,65 @@ class SuratPernyataanKeberangkatan extends CI_Controller
     }
   }
 
+  public function edit($id)
+  {
+    $data['row_2'] = $this->Surat_pernyataan_keberangkatan_model->get_by_id($id);
+
+    if ($data['row_2']) {
+      $data['informasi_text'] = $this->Informasi_text_model->get_information_text();
+      $data['jemaah'] = $this->Jemaah_model->get_all();
+      $data['kode_kota'] = $this->Kode_kota_model->get_all();
+
+      $this->form_validation->set_rules('jemaah_id', "ID Jemaah", "required");
+      $this->form_validation->set_message('required', "%s tidak boleh kosong.");
+
+      $user_input = array(
+        'jemaah_id' => $this->input->post('jemaah_id'),
+      );
+
+      if ($this->form_validation->run() != false) {
+        $this->db->where('id', $id);
+        $this->db->update('surat_pernyataan_keberangkatan', $user_input);
+
+        $this->session->set_flashdata("success", "Data Surat Pernyataan Berhasil Diubah !");
+        redirect('SuratPernyataanKeberangkatan');
+      } else {
+        $this->load->view('template/header.php', $data);
+        $this->load->view('template/sidebar.php');
+        $this->load->view("administrasi/surat_pernyataan_keberangkatan/edit");
+        $this->load->view('template/footer.php');
+      }
+    } else {
+      $data['heading'] = "Data Not Found.";
+      $data['message'] = "Data surat pernyataan keberangkatan tidak ditemukan.";
+      $this->load->view('errors/html/error_404', $data);
+    }
+  }
+
   public function destroy($id)
   {
+    $this->db->where('id', $id);
+    $this->db->delete('surat_pernyataan_keberangkatan');
+
+    $this->session->set_flashdata("success", "Data Surat Pernyataan Berhasil Dihapus !");
+    redirect('SuratPernyataanKeberangkatan');
+  }
+
+  public function download($id)
+  {
+    $data['row'] = $this->Surat_pernyataan_keberangkatan_model->get_by_id($id);
+
+    if ($data['row']) {
+      $this->load->library('pdfgenerator');
+      $data['title'] = "Surat Pernyataan Keberangkatan";
+      $file_pdf = $data['title'];
+      $paper = 'A4';
+      $orientation = "potrait";
+      $html = $this->load->view('administrasi/surat_pernyataan_keberangkatan/download', $data, true);
+      $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+    } else {
+      echo "Data Not Found.";
+    }
   }
 
   public function get_jemaah_by_id()

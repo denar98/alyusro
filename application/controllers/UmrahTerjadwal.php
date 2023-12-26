@@ -645,9 +645,10 @@ class UmrahTerjadwal extends CI_Controller
 				$rows->user_id_agen,
 				$rows->user_id_jemaah,
 				$rows->nama,
-				$rows->tanggal_keberangkatan,
+				// $rows->tanggal_keberangkatan,
 				$rows->status_booking,
 				number_format($rows->total_saldo_jemaah),
+				$rows->tanggal_daftar,
 				'<a href="' . base_url() . 'UmrahTerjadwal/editListing/' . $rows->nik . '" class="btn btn-warning mr-1"  title="Detail"><span> Edit </span></a> <a href="' . base_url() . 'UmrahTerjadwal/hapusListing/' . $rows->nik . '/' . $rows->no_reg_umrah_jemaah . '" class="btn btn-danger mr-1"  title="Hapus"><span> Hapus </span></a> <a href="' . base_url() . 'UmrahTerjadwal/detailListing/' . $rows->nik . '" class="btn btn-info mr-1"  title="Detail"><span> Detail </span></a>'
 			);
 
