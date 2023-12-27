@@ -78,7 +78,7 @@ $segment = $segment1 . $segment2;
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?= base_url() ?>TabunganUmrah/Daftar" class="nav-link " role="button" aria-expanded="false"> Surat Pengajuan Ujroh
+                <a href="<?= base_url() ?>SuratPengajuanUjroh" class="nav-link <?php active_class($this->uri->segment(1), 'SuratPengajuanUjroh') ?>" role="button" aria-expanded="false"> Surat Pengajuan Ujroh
                 </a>
               </li>
               <li class="nav-item">

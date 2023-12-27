@@ -31,7 +31,7 @@
               <h5 class="card-title mb-0">Tambah Surat Pernyataan Keberangkatan</h5>
             </div>
             <div class="card-body">
-              <form action="<?= site_url("SuratPernyataanKeberangkatan/new") ?>" method="post" novalidate enctype="multipart/form-data" novalidate class="needs-validation">
+              <form action="<?= site_url("SuratPernyataanKeberangkatan/new") ?>" method="post" novalidate enctype="multipart/form-data">
                 <div class="row g-3">
                   <div class="col-lg-12">
                     <select class="form-control js-example-basic-single" name="jemaah_id" id="jemaah_id" style="height:57px;">
@@ -97,7 +97,7 @@
                     <input type="text" class="form-control bg-white" id="riwayat_penyakit" placeholder="Riwayat Penyakit" readonly>
                   </div>
                   <div class="d-flex justify-content-end gap-3">
-                    <a href="<?= site_url('SuratPernyataanKeberangkatan') ?>" class="btn btn-warning">
+                    <a href="<?= site_url('SuratPernyataanKeberangkatan') ?>" class="btn btn-primary">
                       Kembali
                     </a>
                     <button type="submit" class="btn btn-info" name="submit">Simpan</button>

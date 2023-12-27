@@ -11,17 +11,17 @@ function show_class($menu, $urlName)
 {
   $menu_administrasi = array(
     "SuratPernyataanKeberangkatan",
+    "SuratPernyataanKeberangkatan/index",
     "SuratPernyataanKeberangkatan/new",
     "SuratPernyataanKeberangkatan/edit",
     "SuratPengajuanUjroh",
     "SuratPembatalanProgram",
-    "SuratPernyataanKeberangkatan/index",
   );
 
   $menu_pendaftaran = array(
     "UmrahTerjadwal/Daftar",
     "TabunganUmrah/Daftar",
-    "Donasi/Daftar"
+    "Donasi/Daftar",
   );
 
   $menu_validasi = array(
@@ -30,7 +30,7 @@ function show_class($menu, $urlName)
     "Validasi/Kelengkapan",
     "Validasi/detailKelengkapan",
     "Validasi/Manifestasi",
-    "Validasi/detailManifestasi"
+    "Validasi/detailManifestasi",
   );
 
   $menu_listing = array(
@@ -48,14 +48,14 @@ function show_class($menu, $urlName)
     "Laskar/TambahLaskar",
     "UmrahTerjadwal/ListingJemaah",
     "Donasi/Listing",
-    "Donasi/detailListing"
+    "Donasi/detailListing",
   );
 
   $menu_keuangan = array(
     "Validasi/HistoryPembayaran",
     "Invoice",
     "Invoice/detailInvoice",
-    "Invoice/tambahInvoice"
+    "Invoice/tambahInvoice",
   );
 
   if ($menu == "administrasi" && in_array($urlName, $menu_administrasi)) {

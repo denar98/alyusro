@@ -643,6 +643,7 @@ class UmrahTerjadwal extends CI_Controller
 		foreach ($tagihan_pembayaran->result() as $rows) {
 			$data[] = array(
 				$rows->user_id_agen,
+				$rows->user_id_referall,
 				$rows->user_id_jemaah,
 				$rows->nama,
 				// $rows->tanggal_keberangkatan,
@@ -745,10 +746,12 @@ class UmrahTerjadwal extends CI_Controller
 
 			$data[] = array(
 				$rows->user_id_agen,
+				$rows->user_id_referall,
 				$rows->user_id_jemaah,
 				$rows->nama,
-				$rows->tanggal_keberangkatan,
+				// $rows->tanggal_keberangkatan,
 				$status,
+				$rows->tanggal_daftar,
 				'<a href="' . base_url() . 'UmrahTerjadwal/editListing/' . $rows->nik . '" class="btn btn-warning mr-1"  title="Edit"><span> Edit </span></a> <a href="' . base_url() . 'UmrahTerjadwal/hapusListing/' . $rows->nik . '/' . $rows->no_reg_umrah_jemaah . '" class="btn btn-danger mr-1"  title="Hapus"><span> Hapus </span></a> <a href="' . base_url() . 'UmrahTerjadwal/detailListing/' . $rows->nik . '" class="btn btn-info mr-1"  title="Detail"><span> Detail </span></a>'
 			);
 
@@ -813,9 +816,10 @@ class UmrahTerjadwal extends CI_Controller
 		$sheet->setCellValue('B3', "ID AGEN"); // Set kolom A3 dengan tulisan "NO"
 		$sheet->setCellValue('C3', "ID JEMAAH"); // Set kolom B3 dengan tulisan "NIS"
 		$sheet->setCellValue('D3', "NAMA JEMAAH"); // Set kolom C3 dengan tulisan "NAMA"
-		$sheet->setCellValue('E3', "RENCANA BERANGKAT"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
-		$sheet->setCellValue('F3', "STATUS"); // Set kolom E3 dengan tulisan "ALAMAT"
-		$sheet->setCellValue('G3', "JUMLAH PEMBAYARAN"); // Set kolom E3 dengan tulisan "ALAMAT"
+		// $sheet->setCellValue('E3', "RENCANA BERANGKAT"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
+		$sheet->setCellValue('E3', "STATUS"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('F3', "JUMLAH PEMBAYARAN"); // Set kolom E3 dengan tulisan "ALAMAT"
+		$sheet->setCellValue('G3', "TANGGAL DAFTAR"); // Set kolom E3 dengan tulisan "ALAMAT"
 		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
 		$sheet->getStyle('A3')->applyFromArray($style_col);
 		$sheet->getStyle('B3')->applyFromArray($style_col);
@@ -834,9 +838,10 @@ class UmrahTerjadwal extends CI_Controller
 			$sheet->setCellValue('B' . $numrow, $data->user_id_referall);
 			$sheet->setCellValue('C' . $numrow, $data->user_id_jemaah);
 			$sheet->setCellValue('D' . $numrow, $data->nama);
-			$sheet->setCellValue('E' . $numrow, $data->tanggal_keberangkatan);
-			$sheet->setCellValue('F' . $numrow, $data->status_booking);
-			$sheet->setCellValue('G' . $numrow, $data->total_saldo_jemaah);
+			// $sheet->setCellValue('E' . $numrow, $data->tanggal_keberangkatan);
+			$sheet->setCellValue('E' . $numrow, $data->status_booking);
+			$sheet->setCellValue('F' . $numrow, $data->total_saldo_jemaah);
+			$sheet->setCellValue('G' . $numrow, $data->tanggal_daftar);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $numrow)->applyFromArray($style_row);
@@ -910,10 +915,12 @@ class UmrahTerjadwal extends CI_Controller
 		$sheet->getStyle('A1')->applyFromArray($style_col); // Set bold kolom A1
 		// Buat header tabel nya pada baris ke 3
 		$sheet->setCellValue('A3', "ID PERWAKILAN"); // Set kolom A3 dengan tulisan "NO"
-		$sheet->setCellValue('B3', "ID JEMAAH"); // Set kolom A3 dengan tulisan "NO"
-		$sheet->setCellValue('C3', "NAMA JEMAAH"); // Set kolom B3 dengan tulisan "NIS"
-		$sheet->setCellValue('D3', "TANGGAL BERANGKAT"); // Set kolom C3 dengan tulisan "NAMA"
+		$sheet->setCellValue('B3', "ID AGEN"); // Set kolom A3 dengan tulisan "NO"
+		$sheet->setCellValue('C3', "ID JEMAAH"); // Set kolom A3 dengan tulisan "NO"
+		$sheet->setCellValue('D3', "NAMA JEMAAH"); // Set kolom B3 dengan tulisan "NIS"
+		// $sheet->setCellValue('E3', "TANGGAL BERANGKAT"); // Set kolom C3 dengan tulisan "NAMA"
 		$sheet->setCellValue('E3', "STATUS"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
+		$sheet->setCellValue('F3', "TANGGAL DAFTAR"); // Set kolom D3 dengan tulisan "JENIS KELAMIN"
 
 		// Apply style header yang telah kita buat tadi ke masing-masing kolom header
 		$sheet->getStyle('A3')->applyFromArray($style_col);
@@ -921,6 +928,7 @@ class UmrahTerjadwal extends CI_Controller
 		$sheet->getStyle('C3')->applyFromArray($style_col);
 		$sheet->getStyle('D3')->applyFromArray($style_col);
 		$sheet->getStyle('E3')->applyFromArray($style_col);
+		$sheet->getStyle('F3')->applyFromArray($style_col);
 
 		// Panggil function view yang ada di SiswaModel untuk menampilkan semua data siswanya
 		// $siswa = $this->SiswaModel->view();
@@ -929,10 +937,12 @@ class UmrahTerjadwal extends CI_Controller
 		$numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
 		foreach ($umrah_terjadwal as $data) { // Lakukan looping pada variabel siswa
 			$sheet->setCellValue('A' . $numrow, $data->user_id_agen);
-			$sheet->setCellValue('B' . $numrow, $data->user_id_jemaah);
-			$sheet->setCellValue('C' . $numrow, $data->nama);
-			$sheet->setCellValue('D' . $numrow, $data->tanggal_keberangkatan);
+			$sheet->setCellValue('B' . $numrow, $data->user_id_referall);
+			$sheet->setCellValue('C' . $numrow, $data->user_id_jemaah);
+			$sheet->setCellValue('D' . $numrow, $data->nama);
+			// $sheet->setCellValue('E' . $numrow, $data->tanggal_keberangkatan);
 			$sheet->setCellValue('E' . $numrow, $data->status_booking);
+			$sheet->setCellValue('F' . $numrow, $data->tanggal_daftar);
 
 			// Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
 			$sheet->getStyle('A' . $numrow)->applyFromArray($style_row);
@@ -940,6 +950,7 @@ class UmrahTerjadwal extends CI_Controller
 			$sheet->getStyle('C' . $numrow)->applyFromArray($style_row);
 			$sheet->getStyle('D' . $numrow)->applyFromArray($style_row);
 			$sheet->getStyle('E' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('F' . $numrow)->applyFromArray($style_row);
 
 			$no++; // Tambah 1 setiap kali looping
 			$numrow++; // Tambah 1 setiap kali looping

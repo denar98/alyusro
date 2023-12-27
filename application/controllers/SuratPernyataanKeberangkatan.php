@@ -134,19 +134,27 @@ class SuratPernyataanKeberangkatan extends CI_Controller
         $this->load->view('template/footer.php');
       }
     } else {
-      $data['heading'] = "Data Not Found.";
-      $data['message'] = "Data surat pernyataan keberangkatan tidak ditemukan.";
+      $data['heading'] = "404 Page Not Found";
+      $data['message'] = "The page you requested was not found.";
       $this->load->view('errors/html/error_404', $data);
     }
   }
 
   public function destroy($id)
   {
-    $this->db->where('id', $id);
-    $this->db->delete('surat_pernyataan_keberangkatan');
+    $count = $this->db->select('*')->from('surat_pernyataan_keberangkatan')->where('id', $id)->count_all_results();
 
-    $this->session->set_flashdata("success", "Data Surat Pernyataan Berhasil Dihapus !");
-    redirect('SuratPernyataanKeberangkatan');
+    if ($count > 0) {
+      $this->db->where('id', $id);
+      $this->db->delete('surat_pernyataan_keberangkatan');
+
+      $this->session->set_flashdata("success", "Data Surat Pernyataan Berhasil Dihapus !");
+      redirect('SuratPernyataanKeberangkatan');
+    } else {
+      $data['heading'] = "404 Page Not Found";
+      $data['message'] = "The page you requested was not found.";
+      $this->load->view('errors/html/error_404', $data);
+    }
   }
 
   public function download($id)
@@ -162,7 +170,9 @@ class SuratPernyataanKeberangkatan extends CI_Controller
       $html = $this->load->view('administrasi/surat_pernyataan_keberangkatan/download', $data, true);
       $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
     } else {
-      echo "Data Not Found.";
+      $data['heading'] = "404 Page Not Found";
+      $data['message'] = "The page you requested was not found.";
+      $this->load->view('errors/html/error_404', $data);
     }
   }
 

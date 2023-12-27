@@ -39,7 +39,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID Perwakilan</th>
-                                        <!-- <th>ID Agen</th> -->
+                                        <th>ID Agen</th>
                                         <th>ID Jemaah</th>
                                         <th>Nama Jemaah</th>
                                         <th>Status</th>
