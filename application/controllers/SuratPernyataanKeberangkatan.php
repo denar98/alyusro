@@ -36,8 +36,6 @@ class SuratPernyataanKeberangkatan extends CI_Controller
     $this->load->model('Informasi_text_model');
     $this->load->model('Surat_pernyataan_keberangkatan_model');
     $this->load->model('Jemaah_model');
-    $this->load->model('Kode_kota_model');
-    $this->load->model('crud_model');
 
     $this->load->helper('menu_active_helper');
   }
@@ -83,7 +81,6 @@ class SuratPernyataanKeberangkatan extends CI_Controller
   {
     $data['informasi_text'] = $this->Informasi_text_model->get_information_text();
     $data['jemaah'] = $this->Jemaah_model->get_all();
-    $data['kode_kota'] = $this->Kode_kota_model->get_all();
 
     $this->form_validation->set_rules('jemaah_id', "ID Jemaah", "required");
     $this->form_validation->set_message('required', "%s tidak boleh kosong.");
@@ -112,7 +109,6 @@ class SuratPernyataanKeberangkatan extends CI_Controller
     if ($data['row_2']) {
       $data['informasi_text'] = $this->Informasi_text_model->get_information_text();
       $data['jemaah'] = $this->Jemaah_model->get_all();
-      $data['kode_kota'] = $this->Kode_kota_model->get_all();
 
       $this->form_validation->set_rules('jemaah_id', "ID Jemaah", "required");
       $this->form_validation->set_message('required', "%s tidak boleh kosong.");
@@ -128,10 +124,10 @@ class SuratPernyataanKeberangkatan extends CI_Controller
         $this->session->set_flashdata("success", "Data Surat Pernyataan Berhasil Diubah !");
         redirect('SuratPernyataanKeberangkatan');
       } else {
-        $this->load->view('template/header.php', $data);
-        $this->load->view('template/sidebar.php');
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
         $this->load->view("administrasi/surat_pernyataan_keberangkatan/edit");
-        $this->load->view('template/footer.php');
+        $this->load->view('template/footer');
       }
     } else {
       $data['heading'] = "404 Page Not Found";

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Helpher untuk mencetak tanggal dalam format bahasa indonesia
  *
@@ -15,7 +16,8 @@
  * @return string nama bulan dalam bahasa indonesia
  */
 if (!function_exists('bulan')) {
-    function bulan(){
+    function bulan()
+    {
         $bulan = Date('m');
         switch ($bulan) {
             case 1:
@@ -69,9 +71,33 @@ if (!function_exists('bulan')) {
  * @return string format tanggal sekarang (contoh: 22 Desember 2016)
  */
 if (!function_exists('tanggal')) {
-    function tanggal($date) {
+    function tanggal($date)
+    {
 
-        $tanggal = Date('d') . " " .bulan(). " ".Date('Y');
+        $tanggal = Date('d') . " " . bulan() . " " . Date('Y');
         return $date;
+    }
+}
+
+
+if (!function_exists('tgl_indo')) {
+    function tgl_indo($tanggal)
+    {
+        $bulan = array(
+            1 =>   'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+        );
+        $pecahkan = explode('-', $tanggal);
+        return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
 }

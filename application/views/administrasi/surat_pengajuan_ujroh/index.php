@@ -38,15 +38,15 @@
                 Tambah Surat Pengajuan Ujroh
               </a>
             </div>
-            <div class="card-body">
+            <div class="card-body overflow-auto">
               <table class="table table-responsive nowrap align-middle" style="width:100%;">
                 <thead>
                   <tr>
                     <th>ID Perwakilan</th>
-                    <th>Nama Perwakilan</th>
                     <th>ID Jemaah</th>
                     <th>Nama Jemaah</th>
                     <th>Tgl Dibuat</th>
+                    <th>Tipe Ujroh</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -54,39 +54,39 @@
                   <?php if (count($surat_pengajuan_ujroh) > 0) : ?>
                     <?php foreach ($surat_pengajuan_ujroh as $row) :  ?>
                       <tr>
-                        <td>
+                        <td class="text-nowrap">
                           <?= $row->user_id_agen ?>
                         </td>
-                        <td>
-                          <?= $row->nama_agen ?>
-                        </td>
-                        <td>
+                        <td class="text-nowrap">
                           <?= $row->user_id_jemaah ?>
                         </td>
-                        <td>
+                        <td class="text-nowrap">
                           <?= $row->nama ?>
                         </td>
-                        <td>
+                        <td class="text-nowrap">
                           <?= $row->created_at ?>
                         </td>
+                        <td class="text-nowrap">
+                          <?= $row->ujroh_name ?>
+                        </td>
                         <td>
-                          <!-- <a href="<?= base_url() ?>SuratPernyataanKeberangkatan/download/<?= $row->id ?>" class="btn btn-success">
+                          <a href="<?= base_url() ?>SuratPengajuanUjroh/download/<?= $row->surat_pengajuan_ujroh_id ?>" class="btn btn-success">
                             <i class="ri-download-2-line me-2"></i>Unduh (.pdf)
-                          </a> -->
+                          </a>
 
-                          <!-- <a href="<?= base_url() ?>SuratPernyataanKeberangkatan/edit/<?= $row->id ?>" class="btn btn-warning">
+                          <a href="<?= base_url() ?>SuratPengajuanUjroh/edit/<?= $row->surat_pengajuan_ujroh_id ?>" class="btn btn-warning">
                             <i class="ri-pencil-line"></i>
                           </a>
 
-                          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#jemaah-modal-<?= $row->id ?>">
+                          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#surat-pengajuan-ujroh-modal-<?= $row->surat_pengajuan_ujroh_id ?>">
                             <i class="ri-delete-bin-line"></i>
                           </button>
 
-                          <div class="modal fade" id="jemaah-modal-<?= $row->id ?>" tabindex="-1" aria-labelledby="jemaah-modal-label-<?= $row->id ?>" aria-hidden="true">
+                          <div class="modal fade" id="surat-pengajuan-ujroh-modal-<?= $row->surat_pengajuan_ujroh_id ?>" tabindex="-1" aria-labelledby="surat-pengajuan-ujroh-modal-label-<?= $row->surat_pengajuan_ujroh_id ?>" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="jemaah-modal-label-<?= $row->id ?>">
+                                  <h5 class="modal-title" id="surat-pengajuan-ujroh-modal-label-<?= $row->surat_pengajuan_ujroh_id ?>">
                                     Hapus Data
                                   </h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -99,13 +99,13 @@
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tutup</button>
-                                  <a href="<?= base_url() ?>SuratPernyataanKeberangkatan/destroy/<?= $row->id ?>" class="btn btn-danger">
+                                  <a href="<?= base_url() ?>SuratPengajuanUjroh/destroy/<?= $row->surat_pengajuan_ujroh_id ?>" class="btn btn-danger">
                                     Ya, Saya Yakin
                                   </a>
                                 </div>
                               </div>
                             </div>
-                          </div> -->
+                          </div>
                         </td>
                       </tr>
                     <?php endforeach ?>

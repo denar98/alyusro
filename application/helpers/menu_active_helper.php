@@ -15,6 +15,8 @@ function show_class($menu, $urlName)
     "SuratPernyataanKeberangkatan/new",
     "SuratPernyataanKeberangkatan/edit",
     "SuratPengajuanUjroh",
+    "SuratPengajuanUjroh/new",
+    "SuratPengajuanUjroh/edit",
     "SuratPembatalanProgram",
   );
 
